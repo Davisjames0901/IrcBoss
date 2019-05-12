@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Digman.Io.IrcBalistic.Abstracts;
+using Digman.Io.IrcBalistic.Classes;
 
 namespace Digman.Io.IrcBalistic.Connections
 {
     public class CommandLineConnection : Connection
     {
-        public CommandLineConnection(Action<string, string, Connection> callBack, Dictionary<string, string> permissions) : base(callBack, permissions)
+        public CommandLineConnection(Action<Message> callBack, ConnectionConfig config) : base(callBack, config)
         {
-            MessageFlag = '?';
         }
 
         public override string Name => $"Cmd {Environment.MachineName}";
@@ -17,11 +17,11 @@ namespace Digman.Io.IrcBalistic.Connections
         {
             while (Open)
             {
-                SendMessage(MessageRecieved(Console.ReadLine(), "DigMan"));
+                //SendMessage(MessageRecieved(Console.ReadLine(), "DigMan"));
             }
         }
 
-        public override void SendMessage(string message)
+        public override void SendMessage(ResponsePacket message)
         {
             Console.WriteLine(message);
         }
