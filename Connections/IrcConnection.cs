@@ -67,11 +67,10 @@ namespace Digman.Io.IrcBalistic.Connections
       catch (Exception e)
       {
         Console.WriteLine(e.ToString());
-        Thread.Sleep(5000);
         if (Open)
         {
-          Listener();
           DisposeConnection();
+          Listener();
         }
       }
     }

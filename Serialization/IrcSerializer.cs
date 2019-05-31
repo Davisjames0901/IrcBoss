@@ -64,15 +64,14 @@ namespace Digman.Io.IrcBalistic.Serialization
       
       var message = new Message
       {
-        Text = content,
+        Text = content.Remove(0, 1),
         SourceUser = _connection.GetUserByName(user),
         Target = target.ToLower() == _connection.Nickname.ToLower()? user : target,
         SourceConnection = _connection,
       };
       if(content.StartsWith(_connection.MessageFlag.ToString()))
       {
-        message.Command = content.Split(' ')[0].Split(_connection.MessageFlag)[1];
-        message.Arguments = content.Split(' ').Where((x,y)=>y>0).ToArray();
+        message.CommandGroup = content.Split(' ')[0].Split(_connection.MessageFlag)[1];
       }
       return message;
     }

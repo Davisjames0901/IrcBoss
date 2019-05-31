@@ -2,10 +2,10 @@ using System;
 
 namespace Digman.Io.IrcBalistic.Attributes
 {
-  public class CommandName : Attribute
+  public class Command : Attribute
   {
     private readonly string _name;
-    public CommandName(string name)
+    public Command(string name = "")
     {
         _name = name.ToLower();
     }

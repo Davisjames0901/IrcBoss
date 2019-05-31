@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Digman.Io.IrcBalistic.Commands
 {
-  [CommandName("echo")]
+  [CommandGroup("echo")]
   [HelpText("Echos the input provided.")]
   public class Echo : ICommand
   {
@@ -14,7 +14,7 @@ namespace Digman.Io.IrcBalistic.Commands
     [Content]
     public string Input { get; set; }
 
-
+    [Command]
     public ResponsePacket Execute()
     {
       var response = new Response
