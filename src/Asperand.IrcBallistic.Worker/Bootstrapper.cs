@@ -4,13 +4,33 @@ using Asperand.IrcBallistic.Worker.Connections;
 using Asperand.IrcBallistic.Worker.Interfaces;
 
 using Asperand.IrcBallistic.Worker.Serialization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Worker
 {
     public static class Bootstrapper
     {
+        public static void ConfigureConfiguration(HostBuilderContext hostContext, IConfigurationBuilder config, string[] args)
+        {
+            config.AddJsonFile("appsettings.json", true);
+            config.AddEnvironmentVariables();
+
+            if (args != null)
+            {
+                config.AddCommandLine(args);
+            }
+        }
+        
+        public static void ConfigureLogging(HostBuilderContext hostContext, ILoggingBuilder logging)
+        {
+            logging.AddConfiguration(hostContext.Configuration.GetSection("Logging"));
+            logging.AddConsole();
+            
+        }
+        
         public static void ConfigureServices(HostBuilderContext hostContext, IServiceCollection services)
         {
 
@@ -31,6 +51,8 @@ namespace Asperand.IrcBallistic.Worker
             services.AddTransient<CommandEngine>();
             services.AddTransient<IConnection, IrcConnection>();
             services.AddTransient<IrcSerializer>();
+            
+            
         }
     }
 }

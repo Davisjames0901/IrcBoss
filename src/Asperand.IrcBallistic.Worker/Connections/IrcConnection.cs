@@ -7,8 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Asperand.IrcBallistic.Worker.Classes;
 using Asperand.IrcBallistic.Worker.Configuration;
-using Asperand.IrcBallistic.Worker.Messages;
 using Asperand.IrcBallistic.Worker.Serialization;
+using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Worker.Connections
 {
@@ -26,17 +26,20 @@ namespace Asperand.IrcBallistic.Worker.Connections
         private TcpClient _tcpConnection;
         private readonly Thread _thread;
         private readonly IrcConfiguration _config;
+        private readonly ILogger<IrcConnection> _log;
 
         private const string User = "USER IRCbot 0 * :IRCbot";
 
         public IrcConnection(IrcConfiguration config,
             IrcSerializer serializer,
-            UserContainer userContainer) 
+            UserContainer userContainer,
+            ILogger<IrcConnection> log) 
             : base(
-                serializer, userContainer)
+                serializer, userContainer, log, config.MessageFlag)
         {
             _thread = new Thread(Listener);
             _config = config;
+            _log = log;
         }
 
         public override void Start()
@@ -49,6 +52,7 @@ namespace Asperand.IrcBallistic.Worker.Connections
 
         private async void Listener()
         {
+            _log.LogInformation("Starting IrcConnection");
             try
             {
                 await InitConnection();
@@ -63,7 +67,7 @@ namespace Asperand.IrcBallistic.Worker.Connections
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                _log.LogError("Error occured maintaining IRC connection", e);
             }
         }
 
@@ -84,7 +88,7 @@ namespace Asperand.IrcBallistic.Worker.Connections
                 string currentLine;
                 while ((currentLine = _reader.ReadLine()) != null && !(identFound && channelJoined))
                 {
-                    Console.WriteLine(currentLine);
+                    _log.LogDebug(currentLine);
                     string[] splitInput = currentLine.Split(' ');
 
                     if (currentLine.StartsWith($":{_config.DefaultNickname}!"))

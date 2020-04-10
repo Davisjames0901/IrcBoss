@@ -5,6 +5,7 @@ using Asperand.IrcBallistic.Worker.Classes;
 using Asperand.IrcBallistic.Worker.Interfaces;
 using Asperand.IrcBallistic.Worker.Messages;
 using Asperand.IrcBallistic.Worker.Serialization;
+using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Worker.Connections
 {
@@ -12,11 +13,16 @@ namespace Asperand.IrcBallistic.Worker.Connections
     {
         private readonly ISerializer _serializer;
         private readonly List<Action<Request>> _callbacks;
+        private readonly ILogger _log; 
+        private readonly char _commandFlag;
         protected readonly UserContainer _userContainer;
-        protected Connection(ISerializer serializer, UserContainer userContainer)
+        
+        protected Connection(ISerializer serializer, UserContainer userContainer, ILogger log, char commandFlag)
         {
             _serializer = serializer;
             _userContainer = userContainer;
+            _commandFlag = commandFlag;
+            _log = log;
             _callbacks = new List<Action<Request>>();
         }
 

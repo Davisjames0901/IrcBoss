@@ -1,16 +1,19 @@
+using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 
 namespace Asperand.IrcBallistic.Worker
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            await CreateHostBuilder(args).RunConsoleAsync();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureServices(Bootstrapper.ConfigureServices);
+                .ConfigureAppConfiguration((hostingContext, config) => Bootstrapper.ConfigureConfiguration(hostingContext, config, args))
+                .ConfigureServices(Bootstrapper.ConfigureServices)
+                .ConfigureLogging(Bootstrapper.ConfigureLogging);
     }
 }

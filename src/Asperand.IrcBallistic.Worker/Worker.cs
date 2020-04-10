@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
@@ -10,12 +8,12 @@ namespace Asperand.IrcBallistic.Worker
 {
     public class Worker : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
+        private readonly ILogger<Worker> _log;
         private readonly ConnectionManager _connectionManager;
 
-        public Worker(ILogger<Worker> logger, ConnectionManager connectionManager)
+        public Worker(ILogger<Worker> log, ConnectionManager connectionManager)
         {
-            _logger = logger;
+            _log = log;
             _connectionManager = connectionManager;
         }
 
@@ -24,7 +22,7 @@ namespace Asperand.IrcBallistic.Worker
             _connectionManager.Start();
             while (!stoppingToken.IsCancellationRequested)
             {
-                //_logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                //_log.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 await Task.Delay(1000, stoppingToken);
             }
         }
