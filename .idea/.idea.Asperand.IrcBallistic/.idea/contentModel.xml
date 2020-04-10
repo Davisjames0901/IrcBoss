@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/.cache/JetBrains/Rider2020.1/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.cache/JetBrains/Rider2020.1/resharper-host/local/Transient/ReSharperHost/v201/SolutionCaches/_Asperand.IrcBallistic.-546291943.00" t="ExcludeRecursive" />
+    <e p="$PROJECT_DIR$" t="IncludeFlat">
+      <e p="Asperand.IrcBallistic.ManagmentConsole" t="IncludeRecursive">
+        <e p="Asperand.IrcBallistic.ManagmentConsole.csproj" t="IncludeRecursive" />
+        <e p="Program.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.1" t="Include">
+              <e p="Asperand.IrcBallistic.ManagmentConsole.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="Asperand.IrcBallistic.Worker" t="IncludeRecursive">
+        <e p="Abstracts" t="Include">
+          <e p="CommandSet.cs" t="Include" />
+          <e p="Connection.cs" t="Include" />
+        </e>
+        <e p="Asperand.IrcBallistic.Worker.csproj" t="IncludeRecursive" />
+        <e p="Attributes" t="Include">
+          <e p="Command.cs" t="Include" />
+          <e p="CommandGroup.cs" t="Include" />
+          <e p="Content.cs" t="Include" />
+          <e p="HelpText.cs" t="Include" />
+          <e p="ICommandPropertyAttribute.cs" t="Include" />
+          <e p="Index.cs" t="Include" />
+          <e p="LongName.cs" t="Include" />
+          <e p="ShortName.cs" t="Include" />
+        </e>
+        <e p="Bootstrapper.cs" t="Include" />
+        <e p="Classes" t="Include">
+          <e p="CommandCreationResult.cs" t="Include" />
+          <e p="CommandEngine.cs" t="Include" />
+          <e p="CommandValidationGroupResult.cs" t="Include" />
+          <e p="CommandValidationResult.cs" t="Include" />
+          <e p="ConnectionConfig.cs" t="Include" />
+          <e p="Flag.cs" t="Include" />
+          <e p="ResponsePacket.cs" t="Include" />
+          <e p="User.cs" t="Include" />
+          <e p="UserContainer.cs" t="Include" />
+        </e>
+        <e p="CommandSets" t="Include">
+          <e p="Default.cs" t="Include" />
+          <e p="Patterns.cs" t="Include" />
+          <e p="PhraseCommands.cs" t="Include" />
+        </e>
+        <e p="Commands" t="Include">
+          <e p="Echo.cs" t="Include" />
+          <e p="ICommand.cs" t="Include" />
+        </e>
+        <e p="Configuration" t="Include">
+          <e p="IrcConfiguration.cs" t="Include" />
+        </e>
+        <e p="ConnectionManager.cs" t="Include" />
+        <e p="Connections" t="Include">
+          <e p="Connection.cs" t="Include" />
+          <e p="ConsoleConnection.cs" t="Include" />
+          <e p="IrcConnection.cs" t="Include" />
+        </e>
+        <e p="Data" t="Include">
+          <e p="gainz.phrase.mention" t="Include" />
+        </e>
+        <e p="Interfaces" t="Include">
+          <e p="IConnection.cs" t="Include" />
+        </e>
+        <e p="Messages" t="Include">
+          <e p="Request.cs" t="Include" />
+          <e p="Response.cs" t="Include" />
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="Serialization" t="Include">
+          <e p="ISerializer.cs" t="Include" />
+          <e p="IrcSerializer.cs" t="Include" />
+        </e>
+        <e p="Worker.cs" t="Include" />
+        <e p="appsettings.Development.json" t="Include" />
+        <e p="appsettings.json" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.1" t="Include">
+              <e p="Asperand.IrcBallistic.Worker.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="Asperand.IrcBallistic.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
