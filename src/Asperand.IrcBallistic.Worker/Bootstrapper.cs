@@ -1,8 +1,9 @@
 using Asperand.IrcBallistic.Worker.Classes;
+using Asperand.IrcBallistic.Worker.Commands;
 using Asperand.IrcBallistic.Worker.Configuration;
 using Asperand.IrcBallistic.Worker.Connections;
+using Asperand.IrcBallistic.Worker.Extensions;
 using Asperand.IrcBallistic.Worker.Interfaces;
-
 using Asperand.IrcBallistic.Worker.Serialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,8 +52,8 @@ namespace Asperand.IrcBallistic.Worker
             services.AddTransient<CommandEngine>();
             services.AddTransient<IConnection, IrcConnection>();
             services.AddTransient<IrcSerializer>();
-            
-            
+            services.AddTransient<CommandLocator>();
+            services.AddAllInheritorsTransient<ICommand>();
         }
     }
 }

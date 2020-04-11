@@ -33,9 +33,11 @@ namespace Asperand.IrcBallistic.Worker.Connections
         public IrcConnection(IrcConfiguration config,
             IrcSerializer serializer,
             UserContainer userContainer,
-            ILogger<IrcConnection> log) 
+            ILogger<IrcConnection> log,
+            CommandEngine commandEngine,
+            CommandLocator commandLocator)
             : base(
-                serializer, userContainer, log, config.MessageFlag)
+                serializer, userContainer, log, commandEngine, commandLocator, config.MessageFlag)
         {
             _thread = new Thread(Listener);
             _config = config;
@@ -67,7 +69,7 @@ namespace Asperand.IrcBallistic.Worker.Connections
             }
             catch (Exception e)
             {
-                _log.LogError("Error occured maintaining IRC connection", e);
+                _log.LogError(e, "Error occured maintaining IRC connection");
             }
         }
 
@@ -121,6 +123,7 @@ namespace Asperand.IrcBallistic.Worker.Connections
             {
                 await Whois(lineTokens.Skip(6));
             }
+
             //todo handle the whois that comes back and update the users
         }
 
@@ -141,6 +144,7 @@ namespace Asperand.IrcBallistic.Worker.Connections
                 });
                 await _writer.WriteLineAsync($"{Identity} WHOIS {username}");
             }
+
             await _writer.FlushAsync();
         }
 

@@ -13,15 +13,24 @@ namespace Asperand.IrcBallistic.Worker.Connections
     {
         private readonly ISerializer _serializer;
         private readonly List<Action<Request>> _callbacks;
+        private readonly CommandEngine _commandEngine;
+        private readonly CommandLocator _commandLocator;
+        protected readonly UserContainer _userContainer;
         private readonly ILogger _log; 
         private readonly char _commandFlag;
-        protected readonly UserContainer _userContainer;
         
-        protected Connection(ISerializer serializer, UserContainer userContainer, ILogger log, char commandFlag)
+        protected Connection(ISerializer serializer, 
+            UserContainer userContainer, 
+            ILogger log, 
+            CommandEngine commandEngine,
+            CommandLocator commandLocator,
+            char commandFlag)
         {
             _serializer = serializer;
             _userContainer = userContainer;
             _commandFlag = commandFlag;
+            _commandEngine = commandEngine;
+            _commandLocator = commandLocator;
             _log = log;
             _callbacks = new List<Action<Request>>();
         }
@@ -37,6 +46,30 @@ namespace Asperand.IrcBallistic.Worker.Connections
         {
             var request = _serializer.Deserialize(message);
             _callbacks.ForEach(x=> x.Invoke(request));
+            if (request.Text[0] != _commandFlag)
+            {
+                return;
+            }
+
+            var commandName = request.Text.Split(_commandFlag)?[1]?.Split(' ')?[0];
+            if (string.IsNullOrWhiteSpace(commandName))
+            {
+                return;
+            }
+            var command = _commandLocator.LocateCommandGroup(commandName);
+            if (command == null)
+            {
+                return;
+            }
+
+            var commandRequest = command.ValidateAndParse(request);
+            var test = _commandEngine.StartCommand(command, commandRequest, this);
+            SendMessage(new Response
+            {
+                Target = request.Target,
+                Text = $"started pid {test} liek gud boi",
+                IsAction = true
+            });
         }
         
         public void RegisterCallback(Action<Request> callback)

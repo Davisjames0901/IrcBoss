@@ -28,7 +28,6 @@ namespace Asperand.IrcBallistic.Worker
 
     public void Start()
     {
-      _log.LogInformation("Starting connections");
       foreach (var item in _connections)
       {
         item.Start();
@@ -37,27 +36,11 @@ namespace Asperand.IrcBallistic.Worker
 
     public async Task Stop()
     {
+      _log.LogInformation("Stopping connections");
       foreach (var item in _connections)
       {
         await item.Stop();
       }
-    }
-
-    protected void ProcessMessage(Request message)
-    {
-      //var group = Bindings.SingleOrDefault(x => x.Value.Any(z => z == connection.Name.ToLower())).Value;
-      ResponsePacket response = null;
-      // if (!string.IsNullOrWhiteSpace(message.Command))
-      // {
-      //   response = _commandEngine.ExecuteCommand(message);
-      // }
-
-      if (response?.Responses == null || !response.Responses.Any())
-      {
-        return;
-      }
-
-      //message.SourceConnection.SendMessage(response);
     }
   }
 }
