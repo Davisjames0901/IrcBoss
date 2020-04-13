@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Asperand.IrcBallistic.Worker.Classes;
 using Asperand.IrcBallistic.Worker.Configuration;
+using Asperand.IrcBallistic.Worker.Messages;
 using Asperand.IrcBallistic.Worker.Serialization;
 using Microsoft.Extensions.Logging;
 
@@ -32,12 +33,9 @@ namespace Asperand.IrcBallistic.Worker.Connections
 
         public IrcConnection(IrcConfiguration config,
             IrcSerializer serializer,
-            UserContainer userContainer,
-            ILogger<IrcConnection> log,
-            CommandEngine commandEngine,
-            CommandLocator commandLocator)
+            ILogger<IrcConnection> log)
             : base(
-                serializer, userContainer, log, commandEngine, commandLocator, config.MessageFlag)
+                serializer, log, config.MessageFlag)
         {
             _thread = new Thread(Listener);
             _config = config;
@@ -116,12 +114,13 @@ namespace Asperand.IrcBallistic.Worker.Connections
             }
             else if (string.Equals(lineTokens[1], "privmsg", StringComparison.CurrentCultureIgnoreCase))
             {
-                MessageReceived(line);
+                EventReceived(line, EventType.Message);
             }
             else if (string.Equals(lineTokens[4], _config.Channel, StringComparison.InvariantCultureIgnoreCase)
                      && string.Equals(lineTokens[5], ':' + _config.DefaultNickname))
             {
-                await Whois(lineTokens.Skip(6));
+                EventReceived(line, EventType.UserDiscovery);
+                //await Whois(lineTokens.Skip(6));
             }
 
             //todo handle the whois that comes back and update the users
@@ -137,11 +136,6 @@ namespace Asperand.IrcBallistic.Worker.Connections
         {
             foreach (var username in usernames)
             {
-                _userContainer.Users.Add(new User
-                {
-                    ConnectionName = Name,
-                    Name = username
-                });
                 await _writer.WriteLineAsync($"{Identity} WHOIS {username}");
             }
 

@@ -7,11 +7,13 @@ namespace Asperand.IrcBallistic.Worker.Interfaces
   public interface IConnection
   {
     string Name { get; }
+    char MessageFlag { get; }
     bool IsOpen { get; }
 
-    Task SendMessage(Response response);
+    Task SendMessage(MessageResponse messageResponse);
     Task Stop();
     void Start();
-    void RegisterCallback(Action<Request> callback);
+    Guid RegisterCallback(EventType eventType, Action<IEvent> callback);
+    public void RemoveCallback(Guid id);
   }
 }

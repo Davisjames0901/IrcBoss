@@ -4,7 +4,7 @@ namespace Asperand.IrcBallistic.Worker.Serialization
 {
   public interface ISerializer
   {
-    Request Deserialize(string message);
-    string Serialize(Response response);
+    IEvent Deserialize(string message, EventType eventType);
+    string Serialize(MessageResponse messageResponse);
   }
 }

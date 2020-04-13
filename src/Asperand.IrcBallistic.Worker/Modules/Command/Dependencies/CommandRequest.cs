@@ -8,6 +8,7 @@ namespace Asperand.IrcBallistic.Worker.Classes
         public Dictionary<string, string> Flags { get; set; }
         public string Content { get; set; }
         public string Raw { get; set; }
-        public User Requester { get; set; }
+        public string Target { get; set; }
+        public string RequesterUsername { get; set; }
     }
 }

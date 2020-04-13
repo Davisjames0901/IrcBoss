@@ -17,6 +17,10 @@ namespace Asperand.IrcBallistic.Worker.Classes
 
         public ICommand LocateCommandGroup(string commandName)
         {
+            if (string.IsNullOrWhiteSpace(commandName))
+            {
+                return null;
+            }
             var test = _services.GetService<IEnumerable<ICommand>>();
             return test
                 .SingleOrDefault(x =>
