@@ -1,4 +1,17 @@
-$HEADER$namespace $NAMESPACE$
+using System;
+
+namespace Asperand.IrcBallistic.Worker.Attributes
 {
-  public class $CLASS$ {$END$}
+    [AttributeUsage(AttributeTargets.Property)]
+    public class FlagAttribute : Attribute
+    {
+        public readonly string Flag;
+        public readonly string HelpText;
+        
+        public FlagAttribute(string flag, string helpText = null)
+        {
+            Flag = flag;
+            HelpText = helpText;
+        }
+    }
 }

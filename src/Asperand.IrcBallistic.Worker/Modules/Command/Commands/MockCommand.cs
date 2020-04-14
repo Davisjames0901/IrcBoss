@@ -7,8 +7,7 @@ using Asperand.IrcBallistic.Worker.Messages;
 
 namespace Asperand.IrcBallistic.Worker.Commands
 {
-    [CommandGroup("mock")]
-    [HelpText("Mocks the target")]
+    [CommandGroup("mock", "Mocks the target")]
     public class MockCommand : BaseCommand
     {
         private readonly UserContainer _users;
@@ -24,11 +23,7 @@ namespace Asperand.IrcBallistic.Worker.Commands
             if (string.IsNullOrWhiteSpace(lastMessage))
                 return CommandExecutionResult.Failed;
 
-            await Connection.SendMessage(new MessageResponse
-            {
-                Target = request.Target,
-                Text = $"<{target}> "+new string(lastMessage.Select((x, i) => i % 2 != 0 ? char.ToUpper(x) : char.ToLower(x)).ToArray()),
-            });
+            await SendMessage($"<{target}> "+new string(lastMessage.Select((x, i) => i % 2 != 0 ? char.ToUpper(x) : char.ToLower(x)).ToArray()));
             return CommandExecutionResult.Success;
         }
     }

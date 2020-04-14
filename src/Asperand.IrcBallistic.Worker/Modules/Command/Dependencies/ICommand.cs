@@ -10,5 +10,6 @@ namespace Asperand.IrcBallistic.Worker.Commands
   {
     CommandExecutionContext Context { get; set; }
     Task<CommandExecutionResult> Execute(CommandRequest request, CancellationToken token);
+    void RemoveCallbacks();
   }
 }

@@ -8,17 +8,12 @@ using Asperand.IrcBallistic.Worker.Messages;
 
 namespace Asperand.IrcBallistic.Worker.Commands
 {
-    [CommandGroup("echo")]
-    [HelpText("Echos the input provided.")]
+    [CommandGroup("echo", "Echos the input provided.")]
     public class Echo : BaseCommand
     {
         public override async Task<CommandExecutionResult> Execute(CommandRequest request, CancellationToken token)
         {
-            var response = new MessageResponse();
-            response.Target = "#davc";
-            response.Text = request.Content;
-            
-            await Connection.SendMessage(response);
+            await SendMessage(request.Content);
             return CommandExecutionResult.Success;
         }
     }

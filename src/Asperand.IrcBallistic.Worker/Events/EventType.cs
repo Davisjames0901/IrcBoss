@@ -3,6 +3,8 @@ namespace Asperand.IrcBallistic.Worker.Messages
     public enum EventType
     {
         Message, 
-        UserDiscovery
+        UserDiscovery,
+        Quit,
+        Join
     }
 }

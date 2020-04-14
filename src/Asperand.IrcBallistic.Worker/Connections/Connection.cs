@@ -43,7 +43,8 @@ namespace Asperand.IrcBallistic.Worker.Connections
             var request = _serializer.Deserialize(message, eventType);
             lock (_callbackLock)
             {
-                _callbacks[eventType]?.ForEach(x => new Thread(() => x.Handle.Invoke(request)).Start());
+                if(_callbacks.ContainsKey(eventType))
+                    _callbacks[eventType]?.ForEach(x => new Thread(() => x.Handle.Invoke(request)).Start());
             }
         }
         

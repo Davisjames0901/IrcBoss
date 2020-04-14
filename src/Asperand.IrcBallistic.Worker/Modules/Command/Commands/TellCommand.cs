@@ -7,58 +7,43 @@ using Asperand.IrcBallistic.Worker.Messages;
 
 namespace Asperand.IrcBallistic.Worker.Commands
 {
-    [CommandGroup("tell")]
+    [CommandGroup("tell", "Waits for a user to be active then delivers a message.")]
     public class TellCommand : BaseCommand
     {
+        [Flag("u", "The target user")]
+        public string Username { get; set; }
+        
+        [Flag("m", "The message to deliver")]
+        public string Message { get; set;  }
+
         private bool _isActive;
-        private DateTime _startTime;
-        public async override Task<CommandExecutionResult> Execute(CommandRequest request, CancellationToken token)
+        public override async Task<CommandExecutionResult> Execute(CommandRequest request, CancellationToken token)
         {
-            if (!request.Flags.ContainsKey("u") && !request.Flags.ContainsKey("m"))
-            {
-                await Connection.SendMessage(new MessageResponse
-                {
-                    Target = request.Target,
-                    Text = "use -u for the username and -m for the message."
-                });
-                return CommandExecutionResult.Failed;
-            }
-            await Connection.SendMessage(new MessageResponse
-            {
-                Target = request.Target,
-                Text = "You can count on me! (for 24 hours at least :D)"
-            });
-            _startTime = DateTime.Now;
+            await SendMessage("You can count on me! (for 24 hours at least :D)");
+            
+            var startTime = DateTime.Now;
             _isActive = true;
-            var id = Connection.RegisterCallback(EventType.Message, e =>
-            {
-                if(string.Equals(request.Flags["u"], (e as MessageRequest)?.SourceUserName, StringComparison.OrdinalIgnoreCase))
-                {
-                    Connection.SendMessage(new MessageResponse
-                    {
-                        Target = request.Target,
-                        Text = $"{request.Flags["u"]}, {request.RequesterUsername} wanted me to tell you '{request.Flags["m"]}'"
-                    });
-                    _isActive = false;
-                }
-            });
+            RegisterMessageCallback(Tell);
             while (_isActive)
             {
-                if (DateTime.Now > _startTime.AddDays(1))
+                if (DateTime.Now > startTime.AddDays(1) && !token.IsCancellationRequested)
                 {
-                    await Connection.SendMessage(new MessageResponse
-                    {
-                        Target = request.Target,
-                        Text = $"feeling faint... must.. relay.. message.. X("
-                    });
-                    Connection.RemoveCallback(id);
+                    await SendMessage($"feeling faint... must.. relay.. message.. DX");
                     return CommandExecutionResult.Failed;
                 }
-                await Task.Delay(1000);
+                await Task.Delay(10000, token);
             }
             
-            Connection.RemoveCallback(id);
             return CommandExecutionResult.Success;
+        }
+
+        private void Tell(MessageRequest e)
+        {
+            if(string.Equals(Username, e.SourceUserName, StringComparison.OrdinalIgnoreCase))
+            {
+                SendMessage($"{Username}, {Context.Request.RequesterUsername} wanted me to tell you '{Message}'");
+                _isActive = false;
+            }
         }
     }
 }

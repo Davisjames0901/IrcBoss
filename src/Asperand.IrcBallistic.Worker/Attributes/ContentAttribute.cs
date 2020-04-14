@@ -1,4 +1,15 @@
-$HEADER$namespace $NAMESPACE$
+using System;
+
+namespace Asperand.IrcBallistic.Worker.Attributes
 {
-  public class $CLASS$ {$END$}
+    [AttributeUsage(AttributeTargets.Property)]
+    public class ContentAttribute : Attribute
+    {
+        public readonly string HelpText;
+        
+        public ContentAttribute(string helpText = null)
+        {
+            HelpText = helpText;
+        }
+    }
 }

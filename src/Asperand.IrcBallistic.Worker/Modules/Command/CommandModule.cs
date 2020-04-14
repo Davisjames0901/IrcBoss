@@ -2,6 +2,7 @@ using System;
 using Asperand.IrcBallistic.Worker.Classes;
 using Asperand.IrcBallistic.Worker.Interfaces;
 using Asperand.IrcBallistic.Worker.Messages;
+using Asperand.IrcBallistic.Worker.Modules.Command.Dependencies;
 using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Worker.Modules.Command
@@ -10,7 +11,7 @@ namespace Asperand.IrcBallistic.Worker.Modules.Command
     {
         private readonly ILogger<CommandModule> _log;
         private readonly CommandEngine _commandEngine;
-        private readonly CommandLocator _commandLocator;
+        private readonly CommandMetadataAccessor _commandAccessor;
         private readonly ArgumentParser _argumentParser;
         private IConnection _source;
 
@@ -20,12 +21,12 @@ namespace Asperand.IrcBallistic.Worker.Modules.Command
         public CommandModule(
             ILogger<CommandModule> log,
             CommandEngine commandEngine,
-            CommandLocator commandLocator,
+            CommandMetadataAccessor commandAccessor,
             ArgumentParser argumentParser)
         {
             _log = log;
             _commandEngine = commandEngine;
-            _commandLocator = commandLocator;
+            _commandAccessor = commandAccessor;
             _argumentParser = argumentParser;
         }
         public void RegisterConnection(IConnection connection)
@@ -48,7 +49,7 @@ namespace Asperand.IrcBallistic.Worker.Modules.Command
             
             _log.LogInformation("Received command request");
             var commandRequest = _argumentParser.ParseCommandRequest(messageRequest);
-            var command = _commandLocator.LocateCommandGroup(commandRequest.CommandName);
+            var command = _commandAccessor.LocateCommandGroup(commandRequest.CommandName);
             if (command == null)
             {
                 return;

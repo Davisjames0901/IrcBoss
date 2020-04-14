@@ -1,4 +1,10 @@
-$HEADER$namespace $NAMESPACE$
+using System.Diagnostics;
+
+namespace Asperand.IrcBallistic.Worker.Configuration
 {
-  public class $CLASS$ {$END$}
+    public class YoutubeConfig
+    {
+        public string ApiKey { get; set; }
+        public string Name { get; set; }
+    }
 }

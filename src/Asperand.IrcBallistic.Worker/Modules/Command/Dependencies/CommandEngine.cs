@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Asperand.IrcBallistic.Worker.Commands;
 using Asperand.IrcBallistic.Worker.Interfaces;
+using Asperand.IrcBallistic.Worker.Modules.Command.Dependencies;
 using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Worker.Classes
@@ -14,11 +15,12 @@ namespace Asperand.IrcBallistic.Worker.Classes
     {
         private readonly ILogger<CommandEngine> _log;
         private readonly ConcurrentDictionary<int, (string Name, DateTime StartTime, Task Task, CancellationTokenSource TokenSource)> _processes;
-
-        public CommandEngine(ILogger<CommandEngine> log)
+        private readonly CommandMetadataAccessor _commandMetadataAccessor;
+        public CommandEngine(ILogger<CommandEngine> log, CommandMetadataAccessor commandMetadataAccessor)
         {
             _log = log;
             _processes = new ConcurrentDictionary<int, (string, DateTime, Task, CancellationTokenSource)>();
+            _commandMetadataAccessor = commandMetadataAccessor;
         }
 
         public int StartCommand(ICommand command, CommandRequest request, IConnection source)
@@ -28,14 +30,16 @@ namespace Asperand.IrcBallistic.Worker.Classes
                 Request = request,
                 SourceConnection = source
             };
+            _commandMetadataAccessor.PopulateCommand(command, request);
+            
             var tokenSource = new CancellationTokenSource();
             var task = command.Execute(request, tokenSource.Token);
-            ScheduleProcess(task, $"{source.Name}:{request.CommandName}", tokenSource);
+            ScheduleProcess(task, command, $"{request.RequesterUsername}:{source.Name}:{request.CommandName}", tokenSource);
             
             return task.Id;
         }
 
-        private void ScheduleProcess(Task<CommandExecutionResult> task, string processName, CancellationTokenSource tokenSource)
+        private void ScheduleProcess(Task<CommandExecutionResult> task, ICommand command, string processName, CancellationTokenSource tokenSource)
         {
             _processes.TryAdd(task.Id, (processName, DateTime.Now, task, tokenSource));
             _log.LogInformation($"Started pid: {task.Id}, Name: {processName}");
@@ -47,6 +51,7 @@ namespace Asperand.IrcBallistic.Worker.Classes
                     _log.LogError($"Pid: {task.Id} returned failed status. Name {processName}");
                 }
                 _processes.TryRemove(task.Id, out _);
+                command.RemoveCallbacks();
             });
         }
 

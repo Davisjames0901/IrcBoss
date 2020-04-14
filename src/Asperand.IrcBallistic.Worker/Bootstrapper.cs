@@ -6,6 +6,7 @@ using Asperand.IrcBallistic.Worker.Extensions;
 using Asperand.IrcBallistic.Worker.Interfaces;
 using Asperand.IrcBallistic.Worker.Modules;
 using Asperand.IrcBallistic.Worker.Modules.Command;
+using Asperand.IrcBallistic.Worker.Modules.Command.Dependencies;
 using Asperand.IrcBallistic.Worker.Modules.UserManagment;
 using Asperand.IrcBallistic.Worker.Serialization;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +21,7 @@ namespace Asperand.IrcBallistic.Worker
         public static void ConfigureConfiguration(HostBuilderContext hostContext, IConfigurationBuilder config, string[] args)
         {
             config.AddJsonFile("appsettings.json", true);
+            config.AddJsonFile("appsettings.Private.json", true);
             config.AddEnvironmentVariables();
 
             if (args != null)
@@ -46,16 +48,19 @@ namespace Asperand.IrcBallistic.Worker
                 ServerHostName = "irc.freenode.net",
                 ServerPort = 6667
             };
+            var youtubeConfig = new YoutubeConfig(); 
+            hostContext.Configuration.GetSection("Youtube").Bind(youtubeConfig);
             services.AddHostedService<Worker>();
             services.AddSingleton(services);
+            services.AddSingleton(youtubeConfig);
             services.AddSingleton(config);
             services.AddSingleton(new UserContainer());
             services.AddSingleton<ConnectionManager>();
+            services.AddSingleton<CommandEngine>();
             
-            services.AddTransient<CommandEngine>();
             services.AddTransient<IConnection, IrcConnection>();
             services.AddTransient<IrcSerializer>();
-            services.AddTransient<CommandLocator>();
+            services.AddTransient<CommandMetadataAccessor>();
             services.AddTransient<ArgumentParser>();
             services.AddTransient<IModule, CommandModule>();
             services.AddTransient<IModule, UserManagementModule>();
