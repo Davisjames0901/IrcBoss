@@ -16,15 +16,15 @@ namespace Asperand.IrcBallistic.Worker.Commands
             _users = users;
         }
         
-        public override async Task<CommandExecutionResult> Execute(CommandRequest request, CancellationToken token)
+        public override async Task<CommandResult> Execute(CommandRequest request, CancellationToken token)
         {
             var target = request.Flags.ContainsKey("u") ? request.Flags["u"] : request.Content;
             var lastMessage = _users.GetLastMessageByName(target);
             if (string.IsNullOrWhiteSpace(lastMessage))
-                return CommandExecutionResult.Failed;
+                return CommandResult.Failed;
 
             await SendMessage($"<{target}> "+new string(lastMessage.Select((x, i) => i % 2 != 0 ? char.ToUpper(x) : char.ToLower(x)).ToArray()));
-            return CommandExecutionResult.Success;
+            return CommandResult.Success;
         }
     }
 }

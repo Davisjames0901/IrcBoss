@@ -8,7 +8,7 @@ namespace Asperand.IrcBallistic.Worker.Commands
     [CommandGroup("test")]
     public class Test : BaseCommand
     {
-        public override async Task<CommandExecutionResult> Execute(CommandRequest request, CancellationToken token)
+        public override async Task<CommandResult> Execute(CommandRequest request, CancellationToken token)
         {
             var times = request.Flags["t"];
             for (var i = 0; i < int.Parse(times); i++)
@@ -16,7 +16,7 @@ namespace Asperand.IrcBallistic.Worker.Commands
                 await SendMessage($"Iteration #{i}");
             }
 
-            return CommandExecutionResult.Success;
+            return CommandResult.Success;
         }
     }
 }

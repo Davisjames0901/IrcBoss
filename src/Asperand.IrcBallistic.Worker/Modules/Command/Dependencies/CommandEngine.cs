@@ -39,19 +39,23 @@ namespace Asperand.IrcBallistic.Worker.Classes
             return task.Id;
         }
 
-        private void ScheduleProcess(Task<CommandExecutionResult> task, ICommand command, string processName, CancellationTokenSource tokenSource)
+        private void ScheduleProcess(Task<CommandResult> task, ICommand command, string processName, CancellationTokenSource tokenSource)
         {
             _processes.TryAdd(task.Id, (processName, DateTime.Now, task, tokenSource));
             _log.LogInformation($"Started pid: {task.Id}, Name: {processName}");
             task.ContinueWith(x =>
             {
-                _log.LogInformation($"Pid: {task.Id} finished.");
-                if (x.Result == CommandExecutionResult.Failed)
-                {
-                    _log.LogError($"Pid: {task.Id} returned failed status. Name {processName}");
-                }
-                _processes.TryRemove(task.Id, out _);
+                _processes.TryRemove(x.Id, out _);
                 command.RemoveCallbacks();
+                
+                if (x.IsCanceled)
+                    _log.LogWarning($"Pid: {x.Id} was canceled.");
+                
+                else if (x.Result == CommandResult.Failed)
+                    _log.LogError($"Pid: {x.Id} returned failed status. Name {processName}");
+                
+                else if (x.Result == CommandResult.Success)
+                    _log.LogError($"Pid: {x.Id} completed successfully");
             });
         }
 
@@ -67,6 +71,7 @@ namespace Asperand.IrcBallistic.Worker.Classes
                 return false;
             
             _processes[pid].TokenSource.Cancel();
+            _processes.TryRemove(pid, out _);
             return true;
         }
         

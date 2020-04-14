@@ -11,10 +11,10 @@ namespace Asperand.IrcBallistic.Worker.Commands
     [CommandGroup("echo", "Echos the input provided.")]
     public class Echo : BaseCommand
     {
-        public override async Task<CommandExecutionResult> Execute(CommandRequest request, CancellationToken token)
+        public override async Task<CommandResult> Execute(CommandRequest request, CancellationToken token)
         {
             await SendMessage(request.Content);
-            return CommandExecutionResult.Success;
+            return CommandResult.Success;
         }
     }
 }

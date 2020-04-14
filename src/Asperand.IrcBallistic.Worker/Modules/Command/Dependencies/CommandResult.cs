@@ -1,6 +1,6 @@
 namespace Asperand.IrcBallistic.Worker.Classes
 {
-    public enum CommandExecutionResult
+    public enum CommandResult
     {
         Success,
         Failed

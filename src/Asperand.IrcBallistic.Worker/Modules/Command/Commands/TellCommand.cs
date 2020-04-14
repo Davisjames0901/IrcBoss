@@ -17,24 +17,19 @@ namespace Asperand.IrcBallistic.Worker.Commands
         public string Message { get; set;  }
 
         private bool _isActive;
-        public override async Task<CommandExecutionResult> Execute(CommandRequest request, CancellationToken token)
+        public override async Task<CommandResult> Execute(CommandRequest request, CancellationToken token)
         {
             await SendMessage("You can count on me! (for 24 hours at least :D)");
             
             var startTime = DateTime.Now;
             _isActive = true;
             RegisterMessageCallback(Tell);
-            while (_isActive)
+            while (_isActive && DateTime.Now < startTime.AddDays(1))
             {
-                if (DateTime.Now > startTime.AddDays(1) && !token.IsCancellationRequested)
-                {
-                    await SendMessage($"feeling faint... must.. relay.. message.. DX");
-                    return CommandExecutionResult.Failed;
-                }
-                await Task.Delay(10000, token);
+                await Task.Delay(1000, token);
             }
             
-            return CommandExecutionResult.Success;
+            return _isActive ? CommandResult.Failed : CommandResult.Success;
         }
 
         private void Tell(MessageRequest e)

@@ -17,11 +17,11 @@ namespace Asperand.IrcBallistic.Worker.Commands
         {
             _youtubeConfig = youtubeConfig;
         }
-        public override async Task<CommandExecutionResult> Execute(CommandRequest request, CancellationToken token)
+        public override async Task<CommandResult> Execute(CommandRequest request, CancellationToken token)
         {
             if (string.IsNullOrWhiteSpace(request.Content))
             {
-                return CommandExecutionResult.Failed;
+                return CommandResult.Failed;
             }
             var youTubeService = new YouTubeService(new BaseClientService.Initializer
             {
@@ -37,7 +37,7 @@ namespace Asperand.IrcBallistic.Worker.Commands
             var video = results.Items.First(x => x.Id.Kind == "youtube#video").Id.VideoId;
 
             await SendMessage($"https://www.youtube.com/watch?v={video}");
-            return CommandExecutionResult.Success;
+            return CommandResult.Success;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Asperand.IrcBallistic.Worker
         public static void ConfigureConfiguration(HostBuilderContext hostContext, IConfigurationBuilder config, string[] args)
         {
             config.AddJsonFile("appsettings.json", true);
-            config.AddJsonFile("appsettings.Private.json", true);
+            config.AddJsonFile("appsettings.private.json", true);
             config.AddEnvironmentVariables();
 
             if (args != null)
@@ -34,26 +34,18 @@ namespace Asperand.IrcBallistic.Worker
         {
             logging.AddConfiguration(hostContext.Configuration.GetSection("Logging"));
             logging.AddConsole();
-            
         }
         
         public static void ConfigureServices(HostBuilderContext hostContext, IServiceCollection services)
         {
-
-            var config = new IrcConfiguration
-            {
-                Channel = "#davc",
-                DefaultNickname = "DrDigBotTesting",
-                MessageFlag = '!',
-                ServerHostName = "irc.freenode.net",
-                ServerPort = 6667
-            };
+            var ircConfig = new IrcConfiguration();
             var youtubeConfig = new YoutubeConfig(); 
             hostContext.Configuration.GetSection("Youtube").Bind(youtubeConfig);
+            hostContext.Configuration.GetSection("Connections:Irc").Bind(ircConfig);
             services.AddHostedService<Worker>();
             services.AddSingleton(services);
             services.AddSingleton(youtubeConfig);
-            services.AddSingleton(config);
+            services.AddSingleton(ircConfig);
             services.AddSingleton(new UserContainer());
             services.AddSingleton<ConnectionManager>();
             services.AddSingleton<CommandEngine>();
