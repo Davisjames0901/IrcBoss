@@ -1,9 +1,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Asperand.IrcBallistic.Worker.Attributes;
-using Asperand.IrcBallistic.Worker.Classes;
+using Asperand.IrcBallistic.Worker.Modules.Command.Dependencies;
 
-namespace Asperand.IrcBallistic.Worker.Commands
+namespace Asperand.IrcBallistic.Worker.Modules.Command.Commands
 {
     [CommandGroup("kill", "Kills a process")]
     public class KillProcess:BaseCommand

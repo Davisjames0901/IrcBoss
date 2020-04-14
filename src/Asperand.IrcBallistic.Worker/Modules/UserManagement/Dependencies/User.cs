@@ -1,6 +1,4 @@
-using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
-
-namespace Asperand.IrcBallistic.Worker.Classes
+namespace Asperand.IrcBallistic.Worker.Modules.UserManagement.Dependencies
 {
   public class User
   {

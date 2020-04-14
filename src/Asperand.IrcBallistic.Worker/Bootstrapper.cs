@@ -1,13 +1,11 @@
-using Asperand.IrcBallistic.Worker.Classes;
-using Asperand.IrcBallistic.Worker.Commands;
 using Asperand.IrcBallistic.Worker.Configuration;
 using Asperand.IrcBallistic.Worker.Connections;
 using Asperand.IrcBallistic.Worker.Extensions;
-using Asperand.IrcBallistic.Worker.Interfaces;
 using Asperand.IrcBallistic.Worker.Modules;
 using Asperand.IrcBallistic.Worker.Modules.Command;
 using Asperand.IrcBallistic.Worker.Modules.Command.Dependencies;
-using Asperand.IrcBallistic.Worker.Modules.UserManagment;
+using Asperand.IrcBallistic.Worker.Modules.UserManagement;
+using Asperand.IrcBallistic.Worker.Modules.UserManagement.Dependencies;
 using Asperand.IrcBallistic.Worker.Serialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

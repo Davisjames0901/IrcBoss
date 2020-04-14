@@ -2,9 +2,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Asperand.IrcBallistic.Worker.Attributes;
-using Asperand.IrcBallistic.Worker.Classes;
+using Asperand.IrcBallistic.Worker.Modules.Command.Dependencies;
+using Asperand.IrcBallistic.Worker.Modules.UserManagement.Dependencies;
 
-namespace Asperand.IrcBallistic.Worker.Commands
+namespace Asperand.IrcBallistic.Worker.Modules.Command.Commands
 {
     [CommandGroup("mock", "Mocks the target")]
     public class MockCommand : BaseCommand

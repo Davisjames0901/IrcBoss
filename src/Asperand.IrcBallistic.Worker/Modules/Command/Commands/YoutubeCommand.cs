@@ -2,12 +2,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Asperand.IrcBallistic.Worker.Attributes;
-using Asperand.IrcBallistic.Worker.Classes;
 using Asperand.IrcBallistic.Worker.Configuration;
+using Asperand.IrcBallistic.Worker.Modules.Command.Dependencies;
 using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
 
-namespace Asperand.IrcBallistic.Worker.Commands
+namespace Asperand.IrcBallistic.Worker.Modules.Command.Commands
 {
     [CommandGroup("yt")]
     public class YoutubeCommand :BaseCommand

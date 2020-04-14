@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Asperand.IrcBallistic.Worker.Commands;
-using Asperand.IrcBallistic.Worker.Interfaces;
-using Asperand.IrcBallistic.Worker.Modules.Command.Dependencies;
+using Asperand.IrcBallistic.Worker.Connections;
 using Microsoft.Extensions.Logging;
 
-namespace Asperand.IrcBallistic.Worker.Classes
+namespace Asperand.IrcBallistic.Worker.Modules.Command.Dependencies
 {
     public class CommandEngine
     {

@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using Asperand.IrcBallistic.Worker.Messages;
+using Asperand.IrcBallistic.Worker.Events;
 
-namespace Asperand.IrcBallistic.Worker.Interfaces
+namespace Asperand.IrcBallistic.Worker.Connections
 {
   public interface IConnection
   {

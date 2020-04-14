@@ -1,5 +1,5 @@
 using System.Linq;
-using Asperand.IrcBallistic.Worker.Messages;
+using Asperand.IrcBallistic.Worker.Events;
 
 namespace Asperand.IrcBallistic.Worker.Serialization
 {

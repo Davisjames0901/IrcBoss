@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Asperand.IrcBallistic.Worker.Classes
+namespace Asperand.IrcBallistic.Worker.Modules.Command.Dependencies
 {
     public class CommandRequest
     {

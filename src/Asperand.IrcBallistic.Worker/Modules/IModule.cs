@@ -1,4 +1,4 @@
-using Asperand.IrcBallistic.Worker.Interfaces;
+using Asperand.IrcBallistic.Worker.Connections;
 
 namespace Asperand.IrcBallistic.Worker.Modules
 {

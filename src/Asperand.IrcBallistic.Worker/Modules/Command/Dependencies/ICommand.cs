@@ -1,10 +1,7 @@
-using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
-using Asperand.IrcBallistic.Worker.Classes;
-using Asperand.IrcBallistic.Worker.Messages;
 
-namespace Asperand.IrcBallistic.Worker.Commands
+namespace Asperand.IrcBallistic.Worker.Modules.Command.Dependencies
 {
   public interface ICommand
   {

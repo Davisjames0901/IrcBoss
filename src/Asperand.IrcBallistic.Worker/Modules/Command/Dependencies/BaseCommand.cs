@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Asperand.IrcBallistic.Worker.Classes;
-using Asperand.IrcBallistic.Worker.Interfaces;
-using Asperand.IrcBallistic.Worker.Messages;
+using Asperand.IrcBallistic.Worker.Connections;
+using Asperand.IrcBallistic.Worker.Events;
 
-namespace Asperand.IrcBallistic.Worker.Commands
+namespace Asperand.IrcBallistic.Worker.Modules.Command.Dependencies
 {
     public abstract class BaseCommand : ICommand
     {

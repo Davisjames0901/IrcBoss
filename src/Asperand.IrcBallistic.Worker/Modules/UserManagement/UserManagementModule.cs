@@ -1,11 +1,9 @@
-using System;
-using System.Linq;
-using Asperand.IrcBallistic.Worker.Classes;
-using Asperand.IrcBallistic.Worker.Interfaces;
-using Asperand.IrcBallistic.Worker.Messages;
+using Asperand.IrcBallistic.Worker.Connections;
+using Asperand.IrcBallistic.Worker.Events;
+using Asperand.IrcBallistic.Worker.Modules.UserManagement.Dependencies;
 using Microsoft.Extensions.Logging;
 
-namespace Asperand.IrcBallistic.Worker.Modules.UserManagment
+namespace Asperand.IrcBallistic.Worker.Modules.UserManagement
 {
     public class UserManagementModule : IModule
     {

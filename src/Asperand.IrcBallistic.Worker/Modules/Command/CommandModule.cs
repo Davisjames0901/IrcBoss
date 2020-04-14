@@ -1,7 +1,6 @@
 using System;
-using Asperand.IrcBallistic.Worker.Classes;
-using Asperand.IrcBallistic.Worker.Interfaces;
-using Asperand.IrcBallistic.Worker.Messages;
+using Asperand.IrcBallistic.Worker.Connections;
+using Asperand.IrcBallistic.Worker.Events;
 using Asperand.IrcBallistic.Worker.Modules.Command.Dependencies;
 using Microsoft.Extensions.Logging;
 

@@ -1,6 +1,6 @@
-using Asperand.IrcBallistic.Worker.Interfaces;
+using Asperand.IrcBallistic.Worker.Connections;
 
-namespace Asperand.IrcBallistic.Worker.Classes
+namespace Asperand.IrcBallistic.Worker.Modules.Command.Dependencies
 {
     public class CommandExecutionContext
     {

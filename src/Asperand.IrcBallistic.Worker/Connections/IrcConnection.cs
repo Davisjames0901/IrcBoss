@@ -5,9 +5,8 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using Asperand.IrcBallistic.Worker.Classes;
 using Asperand.IrcBallistic.Worker.Configuration;
-using Asperand.IrcBallistic.Worker.Messages;
+using Asperand.IrcBallistic.Worker.Events;
 using Asperand.IrcBallistic.Worker.Serialization;
 using Microsoft.Extensions.Logging;
 

@@ -1,5 +1,5 @@
 
-namespace Asperand.IrcBallistic.Worker.Messages
+namespace Asperand.IrcBallistic.Worker.Events
 {
   public class MessageRequest : IEvent
   {

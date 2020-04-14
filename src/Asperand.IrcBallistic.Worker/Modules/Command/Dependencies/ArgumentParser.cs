@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
 using System.Linq;
+using Asperand.IrcBallistic.Worker.Events;
 using Asperand.IrcBallistic.Worker.Extensions;
-using Asperand.IrcBallistic.Worker.Messages;
 
-namespace Asperand.IrcBallistic.Worker.Classes
+namespace Asperand.IrcBallistic.Worker.Modules.Command.Dependencies
 {
     //Todo combine this with the serializer and create a command event type?
     public class ArgumentParser

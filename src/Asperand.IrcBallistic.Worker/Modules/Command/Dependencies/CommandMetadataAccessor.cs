@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Asperand.IrcBallistic.Worker.Attributes;
-using Asperand.IrcBallistic.Worker.Classes;
-using Asperand.IrcBallistic.Worker.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Asperand.IrcBallistic.Worker.Modules.Command.Dependencies

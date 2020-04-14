@@ -1,4 +1,4 @@
-namespace Asperand.IrcBallistic.Worker.Classes
+namespace Asperand.IrcBallistic.Worker.Modules.Command.Dependencies
 {
     public enum CommandResult
     {
