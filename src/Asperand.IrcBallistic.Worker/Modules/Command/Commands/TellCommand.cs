@@ -17,7 +17,7 @@ namespace Asperand.IrcBallistic.Worker.Commands
         public string Message { get; set;  }
 
         private bool _isActive;
-        public override async Task<CommandResult> Execute(CommandRequest request, CancellationToken token)
+        public override async Task<CommandResult> Execute(CancellationToken token)
         {
             await SendMessage("You can count on me! (for 24 hours at least :D)");
             

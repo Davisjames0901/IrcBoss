@@ -14,7 +14,7 @@ namespace Asperand.IrcBallistic.Worker.Commands
         {
             _commandEngine = commandEngine;
         }
-        public override async Task<CommandResult> Execute(CommandRequest request, CancellationToken token)
+        public override async Task<CommandResult> Execute(CancellationToken token)
         {
             var processes = _commandEngine.GetRunningProcesses().ToList();
             foreach (var p in processes)

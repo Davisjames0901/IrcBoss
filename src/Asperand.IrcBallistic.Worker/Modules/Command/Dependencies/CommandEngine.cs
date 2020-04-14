@@ -33,7 +33,7 @@ namespace Asperand.IrcBallistic.Worker.Classes
             _commandMetadataAccessor.PopulateCommand(command, request);
             
             var tokenSource = new CancellationTokenSource();
-            var task = command.Execute(request, tokenSource.Token);
+            var task = command.Execute(tokenSource.Token);
             ScheduleProcess(task, command, $"{request.RequesterUsername}:{source.Name}:{request.CommandName}", tokenSource);
             
             return task.Id;
@@ -55,7 +55,7 @@ namespace Asperand.IrcBallistic.Worker.Classes
                     _log.LogError($"Pid: {x.Id} returned failed status. Name {processName}");
                 
                 else if (x.Result == CommandResult.Success)
-                    _log.LogError($"Pid: {x.Id} completed successfully");
+                    _log.LogInformation($"Pid: {x.Id} completed successfully");
             });
         }
 

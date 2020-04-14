@@ -17,9 +17,12 @@ namespace Asperand.IrcBallistic.Worker.Commands
         {
             _youtubeConfig = youtubeConfig;
         }
-        public override async Task<CommandResult> Execute(CommandRequest request, CancellationToken token)
+
+        [Content]
+        public string Content { get; set; }
+        public override async Task<CommandResult> Execute(CancellationToken token)
         {
-            if (string.IsNullOrWhiteSpace(request.Content))
+            if (string.IsNullOrWhiteSpace(Content))
             {
                 return CommandResult.Failed;
             }
@@ -30,7 +33,7 @@ namespace Asperand.IrcBallistic.Worker.Commands
             });
 
             var requestYt = youTubeService.Search.List("snippet");
-            requestYt.Q = request.Content;
+            requestYt.Q = Content;
             requestYt.MaxResults = 20;
             
             var results = await requestYt.ExecuteAsync(token);

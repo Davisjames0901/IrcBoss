@@ -17,7 +17,7 @@ namespace Asperand.IrcBallistic.Worker.Commands
         [Flag("p", "The id of the process to kill")]
         public string Pid { get; set; }
         
-        public override async Task<CommandResult> Execute(CommandRequest request, CancellationToken token)
+        public override async Task<CommandResult> Execute(CancellationToken token)
         {
             var isNumber = int.TryParse(Pid, out var pid);
             if (!isNumber)

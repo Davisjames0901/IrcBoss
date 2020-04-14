@@ -14,7 +14,7 @@ namespace Asperand.IrcBallistic.Worker.Commands
         public CommandExecutionContext Context { get; set; }
         public IConnection Connection => Context.SourceConnection;
         
-        public abstract Task<CommandResult> Execute(CommandRequest request, CancellationToken token);
+        public abstract Task<CommandResult> Execute(CancellationToken token);
 
         protected Task SendMessage(string message, bool isAction = false)
         {
