@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,10 +32,10 @@ namespace Asperand.IrcBallistic.Worker.Connections
 
         public char MessageFlag => _commandFlag;
 
-        public Task SendMessage(MessageResponse messageResponse)
+        public async Task SendMessage(MessageResponse messageResponse)
         {
             var serializedResponse = _serializer.Serialize(messageResponse);
-            return WriteMessage(serializedResponse);
+            await WriteMessage(serializedResponse);
         }
         protected void EventReceived(string message, EventType eventType)
         {

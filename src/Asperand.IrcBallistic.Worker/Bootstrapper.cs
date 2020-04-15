@@ -50,7 +50,7 @@ namespace Asperand.IrcBallistic.Worker
             
             services.AddTransient<IConnection, IrcConnection>();
             services.AddTransient<IrcSerializer>();
-            services.AddTransient<CommandMetadataAccessor>();
+            services.AddSingleton<CommandMetadataAccessor>();
             services.AddTransient<ArgumentParser>();
             services.AddTransient<IModule, CommandModule>();
             services.AddTransient<IModule, UserManagementModule>();

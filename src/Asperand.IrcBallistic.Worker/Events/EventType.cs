@@ -4,7 +4,6 @@ namespace Asperand.IrcBallistic.Worker.Events
     {
         Message, 
         UserDiscovery,
-        Quit,
-        Join
+        UserEvent
     }
 }

@@ -1,0 +1,11 @@
+[Unit]
+Description=Digbot IRC chat bot
+
+[Service]
+ExecStart=/var/opt/digbot/Asperand.IrcBallistic.Worker
+SyslogIdentifier=Digbot
+Environment=DOTNET_ROOT=/opt/rh/rh-dotnet31/root/usr/lib64/dotnet  
+User={{digbothost}}
+
+[Install]
+WantedBy=multi-user.target

@@ -116,13 +116,10 @@ namespace Asperand.IrcBallistic.Worker.Connections
                 EventReceived(line, EventType.Message);
             }
             else if (string.Equals(lineTokens[1], "quit", StringComparison.CurrentCultureIgnoreCase)
-            || string.Equals(lineTokens[1], "part", StringComparison.CurrentCultureIgnoreCase))
+            || string.Equals(lineTokens[1], "part", StringComparison.CurrentCultureIgnoreCase)
+            || string.Equals(lineTokens[1], "join", StringComparison.CurrentCultureIgnoreCase))
             {
-                EventReceived(line, EventType.Quit);
-            }
-            else if (string.Equals(lineTokens[1], "join", StringComparison.CurrentCultureIgnoreCase))
-            {
-                EventReceived(line, EventType.Join);
+                EventReceived(line, EventType.UserEvent);
             }
             else if (string.Equals(lineTokens[4], _config.Channel, StringComparison.InvariantCultureIgnoreCase)
                      && string.Equals(lineTokens[5], ':' + _config.DefaultNickname))

@@ -1,19 +1,26 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Asperand.IrcBallistic.Worker.Attributes;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Worker.Modules.Command.Dependencies
 {
     public class CommandMetadataAccessor
     {
         private readonly IServiceProvider _services;
-        public CommandMetadataAccessor(IServiceProvider services)
+        private readonly ILogger<CommandMetadataAccessor> _log;
+        private readonly Dictionary<string, Func<ICommand>> _commandLookup;
+        public CommandMetadataAccessor(IServiceProvider services, ILogger<CommandMetadataAccessor> log)
         {
+            _log = log;
             _services = services;
+            _commandLookup = CreateCommandLookup();
         }
+
         public IEnumerable<CommandMetadata> GetAllCommandData()
         {
             var commands = _services.GetService<IEnumerable<ICommand>>();
@@ -39,21 +46,12 @@ namespace Asperand.IrcBallistic.Worker.Modules.Command.Dependencies
         
         public ICommand LocateCommandGroup(string commandName)
         {
-            if (string.IsNullOrWhiteSpace(commandName))
-            {
-                return null;
-            }
-            var test = _services.GetService<IEnumerable<ICommand>>();
-            return test
-                .SingleOrDefault(x =>
-                    string.Equals(
-                        (Attribute.GetCustomAttribute(x.GetType(), typeof(CommandGroup)) as CommandGroup)?.CommandName,
-                        commandName,
-                        StringComparison.InvariantCultureIgnoreCase));
+            return _commandLookup[commandName].Invoke();
         }
 
         public ICommand PopulateCommand(ICommand command, CommandRequest request)
         {
+            var stopwatch = Stopwatch.StartNew();
             var flagMembers = GetMembersWithAttribute(command.GetType(), typeof(FlagAttribute));
             foreach (var item in flagMembers)
             {
@@ -69,7 +67,8 @@ namespace Asperand.IrcBallistic.Worker.Modules.Command.Dependencies
             {
                 SetPropertyValue(command, content as PropertyInfo, request.Content);
             }
-
+            stopwatch.Stop();
+            _log.LogWarning($"Took {stopwatch.ElapsedMilliseconds}ms to populate command.");
             return command;
         }
 
@@ -91,5 +90,30 @@ namespace Asperand.IrcBallistic.Worker.Modules.Command.Dependencies
         {
             prop.SetValue(instance, value);
         }
+
+        private Dictionary<string, Func<ICommand>> CreateCommandLookup()
+        {
+            var commandLookup = new Dictionary<string, Func<ICommand>>();
+            var commands = _services.GetService<IEnumerable<ICommand>>();
+            foreach (var command in commands)
+            {
+                var commandGroupAttribute = Attribute.GetCustomAttribute(command.GetType(), typeof(CommandGroup)) as CommandGroup;
+                if (commandGroupAttribute == null || string.IsNullOrWhiteSpace(commandGroupAttribute.CommandName))
+                {
+                    _log.LogError($"Command didnt have command group attribute or command name was empty. Command: {command.GetType()}");
+                    continue;
+                }
+                commandLookup.Add(commandGroupAttribute.CommandName, () => ResolveCommand(command.GetType()));
+                _log.LogInformation($"Loaded command {commandGroupAttribute.CommandName}");
+            }
+
+            return commandLookup;
+        }
+
+        private ICommand ResolveCommand(Type type)
+        {
+            return (ICommand) _services.GetService(type);
+        }
+        
     }
 }

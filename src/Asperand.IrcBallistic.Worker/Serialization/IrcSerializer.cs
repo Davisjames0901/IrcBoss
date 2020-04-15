@@ -1,22 +1,27 @@
+using System;
 using System.Linq;
 using Asperand.IrcBallistic.Worker.Events;
+using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Worker.Serialization
 {
   public class IrcSerializer : ISerializer
   {
+    private readonly ILogger<IrcSerializer> _log;
+    public IrcSerializer(ILogger<IrcSerializer> log)
+    {
+      _log = log;
+    }
+    
     public IEvent Deserialize(string line, EventType eventType)
     {
-      switch (eventType)
+      return eventType switch
       {
-        case EventType.Message:
-          return HandleMessage(line);
-        
-        case EventType.UserDiscovery:
-          return HandleUserDiscovery(line);
-      }
-
-      return null;
+        EventType.Message => HandleMessage(line),
+        EventType.UserDiscovery => HandleUserDiscovery(line),
+        EventType.UserEvent => HandleUserEvent(line),
+        _ => null
+      };
     }
 
     private MessageRequest HandleMessage(string line)
@@ -40,6 +45,28 @@ namespace Asperand.IrcBallistic.Worker.Serialization
       return new UserDiscovery
       {
         Usernames = line.Split(' ').Skip(6).ToList()
+      };
+    }
+
+    private UserEvent HandleUserEvent(string line)
+    {
+      UserEventEnum? e = line.Split(' ')[1].ToLower() switch 
+      {
+        "join" => UserEventEnum.Joined,
+        "part" => UserEventEnum.Leaving,
+        "quit" => UserEventEnum.Leaving,
+        _      => null
+      };
+      if (e == null)
+      {
+        _log.LogError($"User event unaccounted for. {line}");
+        return null;
+      }
+      
+      return new UserEvent
+      {
+        Username = line.Split(':')[1].Split('!')[0],
+        Event = e.Value
       };
     }
     

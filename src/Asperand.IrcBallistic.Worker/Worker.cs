@@ -20,11 +20,6 @@ namespace Asperand.IrcBallistic.Worker
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _connectionManager.Start();
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                //_log.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(1000, stoppingToken);
-            }
         }
     }
 }

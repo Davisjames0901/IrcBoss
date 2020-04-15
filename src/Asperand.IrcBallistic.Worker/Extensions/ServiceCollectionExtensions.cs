@@ -15,6 +15,7 @@ namespace Asperand.IrcBallistic.Worker.Extensions
             foreach (var type in types)
             {
                 services.AddTransient(typeof(T), type);
+                services.AddTransient(type);
             }
 
             return services;

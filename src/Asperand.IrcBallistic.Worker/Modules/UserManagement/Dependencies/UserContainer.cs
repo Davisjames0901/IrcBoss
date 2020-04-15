@@ -8,9 +8,9 @@ namespace Asperand.IrcBallistic.Worker.Modules.UserManagement.Dependencies
     {
         public UserContainer()
         {
-            Users = new ConcurrentBag<User>(); 
+            Users = new ConcurrentDictionary<string, User>(); 
         }
-        public ConcurrentBag<User> Users { get; set; }
+        public ConcurrentDictionary<string, User> Users { get; set; }
 
         public string GetLastMessageByName(string name)
         {
@@ -19,7 +19,8 @@ namespace Asperand.IrcBallistic.Worker.Modules.UserManagement.Dependencies
 
         public User GetUserByName(string name)
         {
-            return Users.FirstOrDefault(x => string.Equals(x.Name, name, StringComparison.InvariantCultureIgnoreCase));
+            var loweredName = name.ToLower();
+            return Users.ContainsKey(loweredName) ? Users[loweredName] : null;
         }
     }
 }

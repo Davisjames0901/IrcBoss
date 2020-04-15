@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asperand.IrcBallistic.Worker", "Asperand.IrcBallistic.Worker\Asperand.IrcBallistic.Worker.csproj", "{FD8AC479-9047-494D-9D36-4652986CA5AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asperand.IrcBallistic.ManagmentConsole", "Asperand.IrcBallistic.ManagmentConsole\Asperand.IrcBallistic.ManagmentConsole.csproj", "{C684B938-8E0A-469C-A3EE-957D9F626733}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asperand.IrcBallistic.ManagementConsole", "Asperand.IrcBallistic.ManagementConsole\Asperand.IrcBallistic.ManagementConsole.csproj", "{C684B938-8E0A-469C-A3EE-957D9F626733}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

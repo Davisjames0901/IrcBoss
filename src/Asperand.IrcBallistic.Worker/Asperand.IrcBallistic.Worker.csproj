@@ -8,5 +8,10 @@
     <ItemGroup>
         <PackageReference Include="Google.Apis.YouTube.v3" Version="1.45.0.1918" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.3" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.1.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Modules\PatternCommands" />
     </ItemGroup>
 </Project>

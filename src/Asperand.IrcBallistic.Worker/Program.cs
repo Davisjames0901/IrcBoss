@@ -12,6 +12,7 @@ namespace Asperand.IrcBallistic.Worker
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                //.UseSystemd()
                 .ConfigureAppConfiguration((hostingContext, config) => Bootstrapper.ConfigureConfiguration(hostingContext, config, args))
                 .ConfigureServices(Bootstrapper.ConfigureServices)
                 .ConfigureLogging(Bootstrapper.ConfigureLogging);

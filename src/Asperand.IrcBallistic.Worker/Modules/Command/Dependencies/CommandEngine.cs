@@ -13,12 +13,10 @@ namespace Asperand.IrcBallistic.Worker.Modules.Command.Dependencies
     {
         private readonly ILogger<CommandEngine> _log;
         private readonly ConcurrentDictionary<int, (string Name, DateTime StartTime, Task Task, CancellationTokenSource TokenSource)> _processes;
-        private readonly CommandMetadataAccessor _commandMetadataAccessor;
-        public CommandEngine(ILogger<CommandEngine> log, CommandMetadataAccessor commandMetadataAccessor)
+        public CommandEngine(ILogger<CommandEngine> log)
         {
             _log = log;
             _processes = new ConcurrentDictionary<int, (string, DateTime, Task, CancellationTokenSource)>();
-            _commandMetadataAccessor = commandMetadataAccessor;
         }
 
         public int StartCommand(ICommand command, CommandRequest request, IConnection source)
@@ -28,7 +26,6 @@ namespace Asperand.IrcBallistic.Worker.Modules.Command.Dependencies
                 Request = request,
                 SourceConnection = source
             };
-            _commandMetadataAccessor.PopulateCommand(command, request);
             
             var tokenSource = new CancellationTokenSource();
             var task = command.Execute(tokenSource.Token);

@@ -1,3 +1,4 @@
+using System.Linq;
 using Asperand.IrcBallistic.Worker.Connections;
 using Asperand.IrcBallistic.Worker.Events;
 using Asperand.IrcBallistic.Worker.Modules.UserManagement.Dependencies;
@@ -20,6 +21,7 @@ namespace Asperand.IrcBallistic.Worker.Modules.UserManagement
         public void RegisterConnection(IConnection connection)
         {
             connection.RegisterCallback(EventType.UserDiscovery, e => HandleDiscovery(e as UserDiscovery));
+            connection.RegisterCallback(EventType.UserEvent, e => HandleUserEvent(e as UserEvent));
             connection.RegisterCallback(EventType.Message, e => RecordLastMessage(e as MessageRequest));
         }
 
@@ -29,7 +31,7 @@ namespace Asperand.IrcBallistic.Worker.Modules.UserManagement
             foreach (var user in discovery.Usernames)
             {
                 _log.LogInformation($"Adding User {user}");
-                _userContainer.Users.Add(new User
+                _userContainer.Users.TryAdd(user.ToLower(), new User
                 {
                     Name = user
                 });
@@ -47,6 +49,21 @@ namespace Asperand.IrcBallistic.Worker.Modules.UserManagement
             }
 
             user.LastMessage = request.Text;
+        }
+
+        private void HandleUserEvent(UserEvent e)
+        {
+            if (e.Event == UserEventEnum.Joined)
+            {
+                _userContainer.Users.TryAdd(e.Username.ToLower(), new User
+                {
+                    Name = e.Username
+                });
+                _log.LogInformation($"User joined, {e.Username}");
+                return;
+            }
+            _log.LogInformation($"User left, {e.Username}");
+            _userContainer.Users.TryRemove(e.Username.ToLower(), out _);
         }
     }
 }

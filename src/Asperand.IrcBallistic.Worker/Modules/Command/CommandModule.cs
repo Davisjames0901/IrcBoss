@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Asperand.IrcBallistic.Worker.Connections;
 using Asperand.IrcBallistic.Worker.Events;
 using Asperand.IrcBallistic.Worker.Modules.Command.Dependencies;
@@ -41,6 +42,7 @@ namespace Asperand.IrcBallistic.Worker.Modules.Command
 
         private void HandleMessage(MessageRequest messageRequest)
         {
+            var timer = Stopwatch.StartNew();
             if (messageRequest.Text[0] != _source.MessageFlag)
             {
                 return;
@@ -49,6 +51,7 @@ namespace Asperand.IrcBallistic.Worker.Modules.Command
             _log.LogInformation("Received command request");
             var commandRequest = _argumentParser.ParseCommandRequest(messageRequest);
             var command = _commandAccessor.LocateCommandGroup(commandRequest.CommandName);
+            _commandAccessor.PopulateCommand(command, commandRequest);
             if (command == null)
             {
                 return;
@@ -56,6 +59,8 @@ namespace Asperand.IrcBallistic.Worker.Modules.Command
 
             var pid = _commandEngine.StartCommand(command, commandRequest, _source);
             _log.LogInformation($"Started process with pid of {pid}");
+            timer.Stop();
+            _log.LogWarning($"Took {timer.ElapsedMilliseconds}ms to find and execute command!");
         }
     }
 }

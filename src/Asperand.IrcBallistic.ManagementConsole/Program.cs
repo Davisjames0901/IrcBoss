@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Asperand.IrcBallistic.ManagmentConsole
+namespace Asperand.IrcBallistic.ManagementConsole
 {
     class Program
     {
