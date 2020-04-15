@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace Asperand.IrcBallistic.Worker.Configuration
 {
     public class YoutubeConfig

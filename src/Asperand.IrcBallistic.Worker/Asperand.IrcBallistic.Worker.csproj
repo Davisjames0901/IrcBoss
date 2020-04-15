@@ -12,6 +12,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Modules\PatternCommands" />
+      <ProjectReference Include="..\Asperand.IrcBallistic.Connections.Irc\Asperand.IrcBallistic.Connections.Irc.csproj" />
+      <ProjectReference Include="..\Asperand.IrcBallistic.Module.Command\Asperand.IrcBallistic.Module.Command.csproj" />
+      <ProjectReference Include="..\Asperand.IrcBallistic.Module.User\Asperand.IrcBallistic.Module.User.csproj" />
     </ItemGroup>
 </Project>

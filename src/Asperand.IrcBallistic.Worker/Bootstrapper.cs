@@ -1,12 +1,9 @@
+using Asperand.IrcBallistic.Connections.Irc;
+using Asperand.IrcBallistic.Connections.Irc.Extensions;
+using Asperand.IrcBallistic.Core.Extensions;
+using Asperand.IrcBallistic.Module.Command.Extensions;
+using Asperand.IrcBallistic.Module.User.Extensions;
 using Asperand.IrcBallistic.Worker.Configuration;
-using Asperand.IrcBallistic.Worker.Connections;
-using Asperand.IrcBallistic.Worker.Extensions;
-using Asperand.IrcBallistic.Worker.Modules;
-using Asperand.IrcBallistic.Worker.Modules.Command;
-using Asperand.IrcBallistic.Worker.Modules.Command.Dependencies;
-using Asperand.IrcBallistic.Worker.Modules.UserManagement;
-using Asperand.IrcBallistic.Worker.Modules.UserManagement.Dependencies;
-using Asperand.IrcBallistic.Worker.Serialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -40,21 +37,13 @@ namespace Asperand.IrcBallistic.Worker
             var youtubeConfig = new YoutubeConfig(); 
             hostContext.Configuration.GetSection("Youtube").Bind(youtubeConfig);
             hostContext.Configuration.GetSection("Connections:Irc").Bind(ircConfig);
-            services.AddHostedService<Worker>();
-            services.AddSingleton(services);
             services.AddSingleton(youtubeConfig);
-            services.AddSingleton(ircConfig);
-            services.AddSingleton(new UserContainer());
-            services.AddSingleton<ConnectionManager>();
-            services.AddSingleton<CommandEngine>();
             
-            services.AddTransient<IConnection, IrcConnection>();
-            services.AddTransient<IrcSerializer>();
-            services.AddSingleton<CommandMetadataAccessor>();
-            services.AddTransient<ArgumentParser>();
-            services.AddTransient<IModule, CommandModule>();
-            services.AddTransient<IModule, UserManagementModule>();
-            services.AddAllInheritorsTransient<ICommand>();
+            services.AddHostedService<Worker>();
+            services.AddCommandModule();
+            services.AddUserModule();
+            services.AddIrcConnection(ircConfig);
+            services.AddIrcBallistic();
         }
     }
 }

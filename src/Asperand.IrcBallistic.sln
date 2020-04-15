@@ -2,7 +2,13 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asperand.IrcBallistic.Worker", "Asperand.IrcBallistic.Worker\Asperand.IrcBallistic.Worker.csproj", "{FD8AC479-9047-494D-9D36-4652986CA5AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asperand.IrcBallistic.ManagementConsole", "Asperand.IrcBallistic.ManagementConsole\Asperand.IrcBallistic.ManagementConsole.csproj", "{C684B938-8E0A-469C-A3EE-957D9F626733}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asperand.IrcBallistic.Module.Command", "Asperand.IrcBallistic.Module.Command\Asperand.IrcBallistic.Module.Command.csproj", "{98152D46-659E-45C0-8928-E93E2BCF98CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asperand.IrcBallistic.Core", "Asperand.IrcBallistic.Core\Asperand.IrcBallistic.Core.csproj", "{50A93367-4E14-4C0A-BE27-EB3B271462B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asperand.IrcBallistic.Connections.Irc", "Asperand.IrcBallistic.Connections.Irc\Asperand.IrcBallistic.Connections.Irc.csproj", "{F2A691BF-098D-4015-80B1-04062CD39F0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asperand.IrcBallistic.Module.User", "Asperand.IrcBallistic.Module.User\Asperand.IrcBallistic.Module.User.csproj", "{1F7D25A8-0447-4C40-AD92-7ECA3B5E6C0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +20,21 @@ Global
 		{FD8AC479-9047-494D-9D36-4652986CA5AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD8AC479-9047-494D-9D36-4652986CA5AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD8AC479-9047-494D-9D36-4652986CA5AF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C684B938-8E0A-469C-A3EE-957D9F626733}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C684B938-8E0A-469C-A3EE-957D9F626733}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C684B938-8E0A-469C-A3EE-957D9F626733}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C684B938-8E0A-469C-A3EE-957D9F626733}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98152D46-659E-45C0-8928-E93E2BCF98CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98152D46-659E-45C0-8928-E93E2BCF98CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98152D46-659E-45C0-8928-E93E2BCF98CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98152D46-659E-45C0-8928-E93E2BCF98CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50A93367-4E14-4C0A-BE27-EB3B271462B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50A93367-4E14-4C0A-BE27-EB3B271462B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50A93367-4E14-4C0A-BE27-EB3B271462B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50A93367-4E14-4C0A-BE27-EB3B271462B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2A691BF-098D-4015-80B1-04062CD39F0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2A691BF-098D-4015-80B1-04062CD39F0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2A691BF-098D-4015-80B1-04062CD39F0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2A691BF-098D-4015-80B1-04062CD39F0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F7D25A8-0447-4C40-AD92-7ECA3B5E6C0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F7D25A8-0447-4C40-AD92-7ECA3B5E6C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F7D25A8-0447-4C40-AD92-7ECA3B5E6C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F7D25A8-0447-4C40-AD92-7ECA3B5E6C0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
