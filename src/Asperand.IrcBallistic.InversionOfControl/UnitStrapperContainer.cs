@@ -45,8 +45,8 @@ namespace Asperand.IrcBallistic.InversionOfControl
                     .Select(p => p.ParameterType));
 
         private IEnumerable<Type> GetUnusedInScopeRegistrations(List<Type> usedParams) =>
-            this.Select(s => s.ServiceType)
-                .Where(t => usedParams.All(p => p != t));
+            this.MapImplementationTypes(this.Select(s => s.ServiceType)
+                .Where(t => usedParams.All(p => p != t)));
 
         private IEnumerable<Type> GetUniqueConstructorParameterTypes()
         {

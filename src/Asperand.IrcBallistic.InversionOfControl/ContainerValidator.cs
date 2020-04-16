@@ -82,7 +82,7 @@ namespace Asperand.IrcBallistic.InversionOfControl
                 
                 foreach (var dependency in analysis.OutOfScopeUnusedRegisteredTypes)
                 {
-                    errors.AddCreate(unitType, FormatUnitDependencyError("Warn: Out of scope registered dependency not used in scope", unitType, dependency));
+                    errors.AddCreate(unitType, FormatUnitDependencyError("Error: Out of scope registered dependency not used in scope", unitType, dependency));
                 }
             }
 

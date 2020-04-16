@@ -43,9 +43,9 @@ namespace Asperand.IrcBallistic.Worker
             
             services.AddHostedService<Worker>();
             services.AddUnitStrapper();
-            services.AddCommandModule(true);
+            services.AddCommandModule();
             services.AddUserModule();
-            services.AddIrcConnection(ircConfig);
+            services.AddIrcConnection(ircConfig, true);
             services.AddIrcBallistic();
         }
     }
