@@ -21,11 +21,9 @@ namespace Asperand.IrcBallistic.Core.Extensions
             return services;
         }
         
-        public static IServiceCollection AddIrcBallistic(this IServiceCollection services)
+        public static IServiceCollection AddIrcBallistic(this IServiceCollection services, bool addAnalyzer = false)
         {
-            services.AddSingleton<ConnectionManager>();
-
-            return services;
+            return new UnitStrapper().RegisterDependencies(services, addAnalyzer);
         }
     }
 }

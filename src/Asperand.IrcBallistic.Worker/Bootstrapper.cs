@@ -1,6 +1,8 @@
 using Asperand.IrcBallistic.Connections.Irc;
 using Asperand.IrcBallistic.Connections.Irc.Extensions;
 using Asperand.IrcBallistic.Core.Extensions;
+using Asperand.IrcBallistic.InversionOfControl;
+using Asperand.IrcBallistic.InversionOfControl.Extenstions;
 using Asperand.IrcBallistic.Module.Command.Extensions;
 using Asperand.IrcBallistic.Module.User.Extensions;
 using Asperand.IrcBallistic.Worker.Configuration;
@@ -11,9 +13,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Worker
 {
-    public static class Bootstrapper
+    public class Bootstrapper
     {
-        public static void ConfigureConfiguration(HostBuilderContext hostContext, IConfigurationBuilder config, string[] args)
+        public void ConfigureConfiguration(HostBuilderContext hostContext, IConfigurationBuilder config, string[] args)
         {
             config.AddJsonFile("appsettings.json", true);
             config.AddJsonFile("appsettings.private.json", true);
@@ -25,13 +27,13 @@ namespace Asperand.IrcBallistic.Worker
             }
         }
         
-        public static void ConfigureLogging(HostBuilderContext hostContext, ILoggingBuilder logging)
+        public void ConfigureLogging(HostBuilderContext hostContext, ILoggingBuilder logging)
         {
             logging.AddConfiguration(hostContext.Configuration.GetSection("Logging"));
             logging.AddConsole();
         }
         
-        public static void ConfigureServices(HostBuilderContext hostContext, IServiceCollection services)
+        public void ConfigureServices(HostBuilderContext hostContext, IServiceCollection services)
         {
             var ircConfig = new IrcConfiguration();
             var youtubeConfig = new YoutubeConfig(); 
@@ -40,7 +42,8 @@ namespace Asperand.IrcBallistic.Worker
             services.AddSingleton(youtubeConfig);
             
             services.AddHostedService<Worker>();
-            services.AddCommandModule();
+            services.AddUnitStrapper();
+            services.AddCommandModule(true);
             services.AddUserModule();
             services.AddIrcConnection(ircConfig);
             services.AddIrcBallistic();

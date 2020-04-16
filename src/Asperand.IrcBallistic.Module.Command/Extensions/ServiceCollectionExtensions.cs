@@ -7,15 +7,9 @@ namespace Asperand.IrcBallistic.Module.Command.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddCommandModule(this IServiceCollection services)
+        public static IServiceCollection AddCommandModule(this IServiceCollection services, bool addAnalyzer = false)
         {
-            services.AddSingleton<CommandEngine>();
-            services.AddSingleton<CommandMetadataAccessor>();
-            services.AddTransient<ArgumentParser>();
-            services.AddTransient<IModule, CommandModule>();
-            services.AddAllInheritorsTransient<ICommand>();
-
-            return services;
+            return new UnitStrapper().RegisterDependencies(services, addAnalyzer);
         }
     }
 }

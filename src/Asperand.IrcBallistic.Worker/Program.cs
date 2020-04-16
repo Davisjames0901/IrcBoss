@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Asperand.IrcBallistic.InversionOfControl;
 using Microsoft.Extensions.Hosting;
 
 namespace Asperand.IrcBallistic.Worker
@@ -7,14 +8,13 @@ namespace Asperand.IrcBallistic.Worker
     {
         public static async Task Main(string[] args)
         {
-            await CreateHostBuilder(args).RunConsoleAsync();
+            await CreateHostBuilder(args, new Bootstrapper()).RunConsoleAsync();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        public static IHostBuilder CreateHostBuilder(string[] args, Bootstrapper bootstrapper) =>
             Host.CreateDefaultBuilder(args)
-                //.UseSystemd()
-                .ConfigureAppConfiguration((hostingContext, config) => Bootstrapper.ConfigureConfiguration(hostingContext, config, args))
-                .ConfigureServices(Bootstrapper.ConfigureServices)
-                .ConfigureLogging(Bootstrapper.ConfigureLogging);
+                .ConfigureAppConfiguration((hostingContext, config) => bootstrapper.ConfigureConfiguration(hostingContext, config, args))
+                .ConfigureServices(bootstrapper.ConfigureServices)
+                .ConfigureLogging(bootstrapper.ConfigureLogging);
     }
 }
