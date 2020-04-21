@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Asperand.IrcBallistic.InversionOfControl;
 using Microsoft.Extensions.Hosting;
 
 namespace Asperand.IrcBallistic.Worker

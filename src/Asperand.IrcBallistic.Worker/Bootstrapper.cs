@@ -1,11 +1,10 @@
 using Asperand.IrcBallistic.Connections.Irc;
 using Asperand.IrcBallistic.Connections.Irc.Extensions;
 using Asperand.IrcBallistic.Core.Extensions;
-using Asperand.IrcBallistic.InversionOfControl;
-using Asperand.IrcBallistic.InversionOfControl.Extenstions;
 using Asperand.IrcBallistic.Module.Command.Extensions;
 using Asperand.IrcBallistic.Module.User.Extensions;
 using Asperand.IrcBallistic.Worker.Configuration;
+using AsperandLabs.UnitStrap.Core.Extenstions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

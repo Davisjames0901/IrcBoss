@@ -1,6 +1,4 @@
-using System;
-using Asperand.IrcBallistic.InversionOfControl;
-using Asperand.IrcBallistic.InversionOfControl.Abstracts;
+using AsperandLabs.UnitStrap.Core.Abstracts;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Asperand.IrcBallistic.Core

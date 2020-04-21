@@ -1,9 +1,7 @@
-using System;
 using Asperand.IrcBallistic.Core.Extensions;
 using Asperand.IrcBallistic.Core.Interfaces;
-using Asperand.IrcBallistic.InversionOfControl;
-using Asperand.IrcBallistic.InversionOfControl.Abstracts;
 using Asperand.IrcBallistic.Module.Command.Engine;
+using AsperandLabs.UnitStrap.Core.Abstracts;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Asperand.IrcBallistic.Module.Command

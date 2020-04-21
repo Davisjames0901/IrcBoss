@@ -1,8 +1,6 @@
-using System;
 using Asperand.IrcBallistic.Core.Interfaces;
-using Asperand.IrcBallistic.InversionOfControl;
-using Asperand.IrcBallistic.InversionOfControl.Abstracts;
 using Asperand.IrcBallistic.Module.User.Data;
+using AsperandLabs.UnitStrap.Core.Abstracts;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Asperand.IrcBallistic.Module.User

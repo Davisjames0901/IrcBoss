@@ -1,8 +1,7 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Asperand.IrcBallistic.Core;
-using Asperand.IrcBallistic.InversionOfControl;
+using AsperandLabs.UnitStrap.Core;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
