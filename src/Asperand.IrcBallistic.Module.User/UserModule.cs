@@ -1,27 +1,37 @@
-using Asperand.IrcBallistic.Core.Events;
+using System.Threading.Tasks;
 using Asperand.IrcBallistic.Core.Interfaces;
 using Asperand.IrcBallistic.Module.User.Data;
+using Asperand.IrcBallistic.Module.User.Events;
 using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Module.User
 {
     public class UserModule : IModule
     {
+        private readonly ISerializer _serializer;
         private readonly UserContainer _userContainer;
         private readonly ILogger<UserModule> _log;
-        public UserModule(UserContainer userContainer, ILogger<UserModule> log)
+        public UserModule(ISerializer serializer, UserContainer userContainer, ILogger<UserModule> log)
         {
+            _serializer = serializer;
             _userContainer = userContainer;
             _log = log;
         }
         
         public bool IsEagerModule => true;
-        public bool IsReinstatable => false;
-        public void RegisterConnection(IConnection connection)
+        public Task Handle<T>(IRequest requestMessage, T connection) where T : IConnection
         {
-            connection.RegisterCallback(EventType.UserDiscovery, e => HandleDiscovery(e as UserDiscovery));
-            connection.RegisterCallback(EventType.UserEvent, e => HandleUserEvent(e as UserEvent));
-            connection.RegisterCallback(EventType.Message, e => RecordLastMessage(e as MessageRequest));
+            var request = _serializer.Deserialize(requestMessage);
+            switch (request)
+            {
+                case UserDiscovery userDiscovery:
+                    HandleDiscovery(userDiscovery);
+                    break;
+                case UserEvent userEvent:
+                    HandleUserEvent(userEvent);
+                    break;
+            }
+            return Task.CompletedTask;
         }
 
         private void HandleDiscovery(UserDiscovery discovery)
@@ -37,18 +47,19 @@ namespace Asperand.IrcBallistic.Module.User
             }
         }
 
-        private void RecordLastMessage(MessageRequest request)
-        {
-            _log.LogInformation($"Updating user: {request.SourceUserName}'s last message");
-            var user = _userContainer.GetUserByName(request.SourceUserName);
-            if (user == null)
-            {
-                _log.LogError("Attempted to update a user that didnt exit.");
-                return;
-            }
-
-            user.LastMessage = request.Text;
-        }
+        //todo: re-add this functionality
+        // private void RecordLastMessage(IRequest request)
+        // {
+        //     _log.LogInformation($"Updating user: {request.SourceUserName}'s last message");
+        //     var user = _userContainer.GetUserByName(request.SourceUserName);
+        //     if (user == null)
+        //     {
+        //         _log.LogError("Attempted to update a user that didnt exit.");
+        //         return;
+        //     }
+        //
+        //     user.LastMessage = request.Text;
+        // }
 
         private void HandleUserEvent(UserEvent e)
         {

@@ -1,29 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using Asperand.IrcBallistic.Core.Events;
 using Asperand.IrcBallistic.Core.Extensions;
-using Asperand.IrcBallistic.Module.Command.Data;
 
 namespace Asperand.IrcBallistic.Module.Command.Engine
 {
     public class ArgumentParser
     {
-        public CommandRequest ParseCommandRequest(MessageRequest request)
-        {
-            var tokens = request.Text.Split(' ');
-            var content = string.Join(' ',tokens.Skip(1));
-            var commandName = string.Join("", tokens[0].Skip(1));
-            return new CommandRequest
-            {
-                Content = content,
-                Flags = GetFlags(content),
-                CommandName = commandName,
-                Raw = request.Text,
-                Target = request.Target,
-                RequesterUsername = request.SourceUserName
-            };
-        }
-
         private Dictionary<string, string> GetFlags(string line)
         {
             var flags = new Dictionary<string, string>();

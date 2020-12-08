@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Asperand.IrcBallistic.Module.Command.Attributes;
 using Asperand.IrcBallistic.Module.Command.Data;
+using Asperand.IrcBallistic.Module.Command.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 

@@ -1,10 +1,10 @@
 using Asperand.IrcBallistic.Connections.Irc;
 using Asperand.IrcBallistic.Connections.Irc.Extensions;
 using Asperand.IrcBallistic.Core.Extensions;
-using Asperand.IrcBallistic.InversionOfControl;
 using Asperand.IrcBallistic.InversionOfControl.Extenstions;
-using Asperand.IrcBallistic.Module.Command.Extensions;
-using Asperand.IrcBallistic.Module.User.Extensions;
+using Asperand.IrcBallistic.Module.Command;
+using Asperand.IrcBallistic.Module.Command.Irc.Extensions;
+using Asperand.IrcBallistic.Module.User.Irc.Extensions;
 using Asperand.IrcBallistic.Worker.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,9 +43,12 @@ namespace Asperand.IrcBallistic.Worker
             
             services.AddHostedService<Worker>();
             services.AddUnitStrapper();
-            services.AddCommandModule();
-            services.AddUserModule();
-            services.AddIrcConnection(ircConfig, true);
+            services.AddIrcCommandModule(new CommandConfig
+            {
+                MessageFlag = '!'
+            });
+            services.AddIrcUserModule();
+            services.AddIrcConnection(ircConfig);
             services.AddIrcBallistic();
         }
     }

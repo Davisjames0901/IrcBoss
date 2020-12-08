@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Asperand.IrcBallistic.Core.Interfaces;
 using Asperand.IrcBallistic.Module.Command.Data;
 using Asperand.IrcBallistic.Module.Command.Enum;
+using Asperand.IrcBallistic.Module.Command.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Module.Command.Engine
@@ -21,29 +22,29 @@ namespace Asperand.IrcBallistic.Module.Command.Engine
             _processes = new ConcurrentDictionary<int, (string, DateTime, Task, CancellationTokenSource)>();
         }
 
-        public int StartCommand(ICommand command, CommandRequest request, IConnection source)
+        public int StartCommand(ICommand command, CommandRequest request, IConnection source, IResponsiveModule module)
         {
             command.Context = new CommandExecutionContext
             {
                 Request = request,
-                SourceConnection = source
+                SourceConnection = source,
+                Module = module
             };
             
             var tokenSource = new CancellationTokenSource();
             var task = command.Execute(tokenSource.Token);
-            ScheduleProcess(task, command, $"{request.RequesterUsername}:{source.Name}:{request.CommandName}", tokenSource);
+            ScheduleProcess(task, $"{request.RequesterUsername}:{source.Name}:{request.CommandName}", tokenSource);
             
             return task.Id;
         }
 
-        private void ScheduleProcess(Task<CommandResult> task, ICommand command, string processName, CancellationTokenSource tokenSource)
+        private void ScheduleProcess(Task<CommandResult> task, string processName, CancellationTokenSource tokenSource)
         {
             _processes.TryAdd(task.Id, (processName, DateTime.Now, task, tokenSource));
             _log.LogInformation($"Started pid: {task.Id}, Name: {processName}");
             task.ContinueWith(x =>
             {
                 _processes.TryRemove(x.Id, out _);
-                command.RemoveCallbacks();
                 
                 if (x.IsCanceled)
                     _log.LogWarning($"Pid: {x.Id} was canceled.");

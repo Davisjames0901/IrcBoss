@@ -1,14 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Google.Apis.YouTube.v3" Version="1.45.0.1918" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <ProjectReference Include="..\Asperand.IrcBallistic.Connections.Irc\Asperand.IrcBallistic.Connections.Irc.csproj" />
       <ProjectReference Include="..\Asperand.IrcBallistic.Core\Asperand.IrcBallistic.Core.csproj" />
     </ItemGroup>
 

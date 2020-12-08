@@ -1,0 +1,6 @@
+Warn: In scope registered dependency not used in scope
+	Unit: Asperand.IrcBallistic.Connections.Irc.UnitStrapper
+	Dependency: Asperand.IrcBallistic.Connections.Irc.IrcConnection
+Warn: In scope registered dependency not used in scope
+	Unit: Asperand.IrcBallistic.Connections.Irc.UnitStrapper
+	Dependency: Asperand.IrcBallistic.Connections.Irc.Modules.PingModule

@@ -4,47 +4,42 @@ using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using Asperand.IrcBallistic.Core;
-using Asperand.IrcBallistic.Core.Events;
+using Asperand.IrcBallistic.Core.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Connections.Irc
 {
-    public class IrcConnection : Connection
+    public class IrcConnection : IConnection
     {
         //Interface props
-        public override string Name => $"IRC-{_config.Channel}-{_config.DefaultNickname}";
-
-        //public connection specific props
-        public string Identity;
+        public string Name => $"IRC-{_config.Channel}-{_config.DefaultNickname}";
 
         //private props
         private StreamWriter _writer;
         private StreamReader _reader;
         private TcpClient _tcpConnection;
+        private bool _isRunning;
+        private string _identity;
         private readonly Thread _thread;
         private readonly IrcConfiguration _config;
+        private readonly IEnumerable<IModule> _modules;
         private readonly ILogger<IrcConnection> _log;
 
         private const string User = "USER IRCbot 0 * :IRCbot";
 
-        public IrcConnection(IrcConfiguration config,
-            IrcSerializer serializer,
-            ILogger<IrcConnection> log)
-            : base(
-                serializer, log, config.MessageFlag)
+        public IrcConnection(IrcConfiguration config, IEnumerable<IModule> modules, ILogger<IrcConnection> log)
         {
             _thread = new Thread(Listener);
             _config = config;
+            _modules = modules;
             _log = log;
         }
 
-        public override void Start()
+        public void Start(IEnumerable<IModule> modules)
         {
-            if (!IsOpen)
-            {
-                _thread.Start();
-            }
+            if (_isRunning) return;
+            _thread.Start();
+            _isRunning = true;
         }
 
         private async void Listener()
@@ -53,12 +48,16 @@ namespace Asperand.IrcBallistic.Connections.Irc
             try
             {
                 await InitConnection();
-                while (IsOpen)
+                while (_isRunning)
                 {
                     string inputLine;
                     while ((inputLine = await _reader.ReadLineAsync()) != null)
                     {
-                        await HandleLine(inputLine);
+                        var request = new IrcRequest(inputLine);
+                        foreach (var module in _modules)
+                        {
+                            await module.Handle(request, this);
+                        }
                     }
                 }
             }
@@ -71,7 +70,6 @@ namespace Asperand.IrcBallistic.Connections.Irc
         private async Task InitConnection()
         {
             _tcpConnection = new TcpClient(_config.ServerHostName, _config.ServerPort);
-            IsOpen = true;
             var stream = _tcpConnection.GetStream();
             _reader = new StreamReader(stream);
             _writer = new StreamWriter(stream);
@@ -86,11 +84,11 @@ namespace Asperand.IrcBallistic.Connections.Irc
                 while ((currentLine = _reader.ReadLine()) != null && !(identFound && channelJoined))
                 {
                     _log.LogDebug(currentLine);
-                    string[] splitInput = currentLine.Split(' ');
+                    var splitInput = currentLine.Split(' ');
 
                     if (currentLine.StartsWith($":{_config.DefaultNickname}!"))
                     {
-                        Identity = currentLine.Split(' ')[0];
+                        _identity = currentLine.Split(' ')[0];
                         identFound = true;
                     }
                     else if (splitInput[1] == "001")
@@ -102,36 +100,9 @@ namespace Asperand.IrcBallistic.Connections.Irc
             }
         }
 
-        private async Task HandleLine(string line)
+        public async Task WriteMessage(string message)
         {
-            var lineTokens = line.Split(' ');
-            if (lineTokens[0] == "PING")
-            {
-                await WriteMessage($"PONG {lineTokens[1]}");
-            }
-            else if (string.Equals(lineTokens[1], "privmsg", StringComparison.CurrentCultureIgnoreCase))
-            {
-                EventReceived(line, EventType.Message);
-            }
-            else if (string.Equals(lineTokens[1], "quit", StringComparison.CurrentCultureIgnoreCase)
-            || string.Equals(lineTokens[1], "part", StringComparison.CurrentCultureIgnoreCase)
-            || string.Equals(lineTokens[1], "join", StringComparison.CurrentCultureIgnoreCase))
-            {
-                EventReceived(line, EventType.UserEvent);
-            }
-            else if (string.Equals(lineTokens[4], _config.Channel, StringComparison.InvariantCultureIgnoreCase)
-                     && string.Equals(lineTokens[5], ':' + _config.DefaultNickname))
-            {
-                EventReceived(line, EventType.UserDiscovery);
-                //await Whois(lineTokens.Skip(6));
-            }
-
-            //todo handle the whois that comes back and update the users
-        }
-
-        public override async Task WriteMessage(string message)
-        {
-            await _writer.WriteLineAsync($"{Identity} {message}");
+            await _writer.WriteLineAsync($"{_identity} {message}");
             await _writer.FlushAsync();
         }
 
@@ -139,15 +110,15 @@ namespace Asperand.IrcBallistic.Connections.Irc
         {
             foreach (var username in usernames)
             {
-                await _writer.WriteLineAsync($"{Identity} WHOIS {username}");
+                await _writer.WriteLineAsync($"{_identity} WHOIS {username}");
             }
 
             await _writer.FlushAsync();
         }
 
-        public override async Task Stop()
+        public async Task Stop()
         {
-            await WriteMessage($"{Identity} QUIT :I'll Show myself out. ");
+            await WriteMessage($"{_identity} QUIT :I'll Show myself out. ");
             DisposeConnection();
             _thread.Join();
         }

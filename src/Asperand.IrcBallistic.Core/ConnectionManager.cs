@@ -29,13 +29,7 @@ namespace Asperand.IrcBallistic.Core
             foreach (var connection in _connections)
             {
                 var modules = _services.GetService<IEnumerable<IModule>>().Where(x=>x.IsEagerModule);
-                connection.Start();
-                _log.LogInformation($"Registering modules for {nameof(connection)}");
-                foreach (var module in modules)
-                {
-                    _log.LogInformation($"Registering module {nameof(module)}");
-                    module.RegisterConnection(connection);
-                }
+                connection.Start(modules);
             }
         }
 

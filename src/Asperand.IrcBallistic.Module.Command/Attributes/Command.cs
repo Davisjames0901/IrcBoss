@@ -2,13 +2,13 @@ using System;
 
 namespace Asperand.IrcBallistic.Module.Command.Attributes
 {
-  public class Command : Attribute
-  {
-    private readonly string _name;
-    public Command(string name = "")
+    public class Command : Attribute
     {
-        _name = name.ToLower();
+        public Command(string name = "")
+        {
+            Name = name.ToLower();
+        }
+
+        public string Name { get; }
     }
-    public string Name => _name;
-  }
 }

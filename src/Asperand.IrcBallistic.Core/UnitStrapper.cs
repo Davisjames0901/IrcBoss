@@ -1,5 +1,3 @@
-using System;
-using Asperand.IrcBallistic.InversionOfControl;
 using Asperand.IrcBallistic.InversionOfControl.Abstracts;
 using Microsoft.Extensions.DependencyInjection;
 
