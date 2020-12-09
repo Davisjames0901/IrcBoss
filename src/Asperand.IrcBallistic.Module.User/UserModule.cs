@@ -1,37 +1,43 @@
 using System.Threading.Tasks;
 using Asperand.IrcBallistic.Core.Interfaces;
+using Asperand.IrcBallistic.Core.Module;
 using Asperand.IrcBallistic.Module.User.Data;
 using Asperand.IrcBallistic.Module.User.Events;
 using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Module.User
 {
-    public class UserModule : IModule
+    public class UserModule : ModuleBase
     {
         private readonly ISerializer _serializer;
         private readonly UserContainer _userContainer;
         private readonly ILogger<UserModule> _log;
-        public UserModule(ISerializer serializer, UserContainer userContainer, ILogger<UserModule> log)
+        public UserModule(ISerializer serializer, UserContainer userContainer, ILogger<UserModule> log) : base(log)
         {
             _serializer = serializer;
             _userContainer = userContainer;
             _log = log;
         }
         
-        public bool IsEagerModule => true;
-        public Task Handle<T>(IRequest requestMessage, T connection) where T : IConnection
+        public override bool IsEagerModule => true;
+        public override int TimeoutSeconds => 10;
+
+        protected override Task<ModuleResult> Execute<T>(IRequest requestMessage, T connection)
         {
             var request = _serializer.Deserialize(requestMessage);
+            var result = ModuleResult.Nop;
             switch (request)
             {
                 case UserDiscovery userDiscovery:
                     HandleDiscovery(userDiscovery);
+                    result = ModuleResult.Op;
                     break;
                 case UserEvent userEvent:
                     HandleUserEvent(userEvent);
+                    result = ModuleResult.Op;
                     break;
             }
-            return Task.CompletedTask;
+            return Task.FromResult(result);
         }
 
         private void HandleDiscovery(UserDiscovery discovery)

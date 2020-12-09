@@ -1,13 +1,13 @@
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 
 namespace Asperand.IrcBallistic.Core.Interfaces
 {
-  public interface IConnection
+  public interface IConnection : IDisposable
   {
     string Name { get; }
     Task Stop();
-    void Start(IEnumerable<IModule> modules);
-    public Task WriteMessage(string message);
+    void Start();
+    public Task WriteMessage(Response message);
   }
 }

@@ -22,13 +22,12 @@ namespace Asperand.IrcBallistic.Module.Command.Engine
             _processes = new ConcurrentDictionary<int, (string, DateTime, Task, CancellationTokenSource)>();
         }
 
-        public int StartCommand(ICommand command, CommandRequest request, IConnection source, IResponsiveModule module)
+        public int StartCommand(ICommand command, CommandRequest request, IConnection source)
         {
             command.Context = new CommandExecutionContext
             {
                 Request = request,
-                SourceConnection = source,
-                Module = module
+                SourceConnection = source
             };
             
             var tokenSource = new CancellationTokenSource();

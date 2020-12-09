@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Asperand.IrcBallistic.Core.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Core
@@ -12,13 +9,10 @@ namespace Asperand.IrcBallistic.Core
     {
         private readonly IEnumerable<IConnection> _connections;
         private readonly ILogger<ConnectionManager> _log;
-        private readonly IServiceProvider _services;
 
         public ConnectionManager(IEnumerable<IConnection> connections,
-            ILogger<ConnectionManager> log,
-            IServiceProvider services)
+            ILogger<ConnectionManager> log)
         {
-            _services = services;
             _connections = connections;
             _log = log;
         }
@@ -28,8 +22,7 @@ namespace Asperand.IrcBallistic.Core
             _log.LogInformation("Starting connections");
             foreach (var connection in _connections)
             {
-                var modules = _services.GetService<IEnumerable<IModule>>().Where(x=>x.IsEagerModule);
-                connection.Start(modules);
+                connection.Start();
             }
         }
 

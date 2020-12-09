@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asperand.IrcBallistic.Modul
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asperand.IrcBallistic.Module.Command.Irc", "Asperand.IrcBallistic.Module.Command.Irc\Asperand.IrcBallistic.Module.Command.Irc.csproj", "{E8D735CE-1BFD-4173-92BF-F9C555506900}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asperand.IrcBallistic.Utilities", "Asperand.IrcBallistic.Utilities\Asperand.IrcBallistic.Utilities.csproj", "{74F1B5F1-CFDE-47E3-BC0A-8E21C4984CF4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,10 @@ Global
 		{E8D735CE-1BFD-4173-92BF-F9C555506900}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8D735CE-1BFD-4173-92BF-F9C555506900}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8D735CE-1BFD-4173-92BF-F9C555506900}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74F1B5F1-CFDE-47E3-BC0A-8E21C4984CF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74F1B5F1-CFDE-47E3-BC0A-8E21C4984CF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74F1B5F1-CFDE-47E3-BC0A-8E21C4984CF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74F1B5F1-CFDE-47E3-BC0A-8E21C4984CF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{98152D46-659E-45C0-8928-E93E2BCF98CD} = {1B910429-D60F-46CF-A10F-1869BF7DE549}
@@ -79,5 +85,6 @@ Global
 		{F2A691BF-098D-4015-80B1-04062CD39F0C} = {AFFCA9EF-D426-4A4C-9BD1-F1EAB44DE451}
 		{899FE1CB-25A7-4AE1-965F-D04A540BEF99} = {CA2A3FDA-44E2-42FC-849C-6780981ED0A8}
 		{E8D735CE-1BFD-4173-92BF-F9C555506900} = {1B910429-D60F-46CF-A10F-1869BF7DE549}
+		{74F1B5F1-CFDE-47E3-BC0A-8E21C4984CF4} = {787B76F1-351C-4DDA-BBF5-9D78E04E44DC}
 	EndGlobalSection
 EndGlobal

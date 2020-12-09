@@ -1,16 +1,29 @@
 using System.Threading.Tasks;
 using Asperand.IrcBallistic.Core.Interfaces;
+using Asperand.IrcBallistic.Core.Module;
+using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Connections.Irc.Modules
 {
-    public class PingModule: IModule
+    public class PingModule: ModuleBase
     {
-        public bool IsEagerModule => true;
+        public PingModule(ILogger<IModule> log) : base(log)
+        { }
         
-        public Task Handle<T>(IRequest requestMessage, T connection) where T : IConnection
+        public override bool IsEagerModule => true;
+        public override int TimeoutSeconds => 10;
+        
+        protected override async Task<ModuleResult> Execute<T>(IRequest payload, T connection)
         {
-            var request = (IrcRequest) requestMessage;
-            return request.LineTokens[0] == "PING" ? connection.WriteMessage("PONG") : Task.CompletedTask;
+            var irc = connection as IrcConnection;
+            var request = (IrcRequest) payload;
+            if (request.LineTokens[0] == "PING")
+            {
+                await irc.WriteMessage("PONG");
+                return ModuleResult.Op;
+            }
+
+            return ModuleResult.Nop;
         }
     }
 }

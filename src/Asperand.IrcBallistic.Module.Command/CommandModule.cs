@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Asperand.IrcBallistic.Connections.Irc;
 using Asperand.IrcBallistic.Core.Interfaces;
+using Asperand.IrcBallistic.Core.Module;
 using Asperand.IrcBallistic.Module.Command.Data;
 using Asperand.IrcBallistic.Module.Command.Engine;
 using Asperand.IrcBallistic.Module.Command.Interfaces;
@@ -9,20 +9,21 @@ using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Module.Command
 {
-    public class CommandModule : IResponsiveModule
+    public class CommandModule : ModuleBase
     {
         private readonly ILogger<CommandModule> _log;
         private readonly CommandEngine _commandEngine;
         private readonly CommandMetadataAccessor _commandAccessor;
         private readonly ISerializer _serializer;
 
-        public bool IsEagerModule => true;
-
+        public override int TimeoutSeconds => 10;
+        public override bool IsEagerModule => true;
+        
         public CommandModule(
             ILogger<CommandModule> log,
             CommandEngine commandEngine,
             CommandMetadataAccessor commandAccessor,
-            ISerializer serializer)
+            ISerializer serializer): base(log)
         {
             _log = log;
             _commandEngine = commandEngine;
@@ -30,20 +31,15 @@ namespace Asperand.IrcBallistic.Module.Command
             _serializer = serializer;
         }
 
-        public Task Handle<T>(IRequest payload, T connection) where T : IConnection
+        protected override Task<ModuleResult> Execute<T>(IRequest payload, T connection)
         {
             var request = _serializer.Deserialize(payload);
             if(request is not null)
-                HandleMessage(request, connection);
-            return Task.CompletedTask;
+                return Task.FromResult(HandleMessage(request, connection));
+            return Task.FromResult(ModuleResult.Nop);
         }
 
-        public Task WriteMessage(IResponse response, IConnection source)
-        {
-            return (source as IrcConnection).WriteMessage(_serializer.Serialize(response));
-        }
-
-        private void HandleMessage(CommandRequest request, IConnection connection)
+        private ModuleResult HandleMessage(CommandRequest request, IConnection connection)
         {
             var timer = Stopwatch.StartNew();
             
@@ -51,14 +47,13 @@ namespace Asperand.IrcBallistic.Module.Command
             var command = _commandAccessor.LocateCommandGroup(request.CommandName);
             _commandAccessor.PopulateCommand(command, request);
             if (command == null)
-            {
-                return;
-            }
+                return ModuleResult.Nop;
 
-            var pid = _commandEngine.StartCommand(command, request, connection, this);
+            var pid = _commandEngine.StartCommand(command, request, connection);
             _log.LogInformation($"Started process with pid of {pid}");
             timer.Stop();
             _log.LogWarning($"Took {timer.ElapsedMilliseconds}ms to find and execute command!");
+            return ModuleResult.Op;
         }
     }
 }

@@ -4,42 +4,37 @@ using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using Asperand.IrcBallistic.Core;
 using Asperand.IrcBallistic.Core.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Connections.Irc
 {
-    public class IrcConnection : IConnection
+    public class IrcConnection : ConnectionBase
     {
-        //Interface props
-        public string Name => $"IRC-{_config.Channel}-{_config.DefaultNickname}";
+        public override string Name => $"IRC-{_config.Channel}-{_config.DefaultNickname}";
 
-        //private props
         private StreamWriter _writer;
         private StreamReader _reader;
         private TcpClient _tcpConnection;
-        private bool _isRunning;
         private string _identity;
         private readonly Thread _thread;
         private readonly IrcConfiguration _config;
-        private readonly IEnumerable<IModule> _modules;
         private readonly ILogger<IrcConnection> _log;
 
         private const string User = "USER IRCbot 0 * :IRCbot";
 
         public IrcConnection(IrcConfiguration config, IEnumerable<IModule> modules, ILogger<IrcConnection> log)
+            : base(modules, log)
         {
             _thread = new Thread(Listener);
             _config = config;
-            _modules = modules;
             _log = log;
         }
 
-        public void Start(IEnumerable<IModule> modules)
+        public override void InternalStart()
         {
-            if (_isRunning) return;
             _thread.Start();
-            _isRunning = true;
         }
 
         private async void Listener()
@@ -48,16 +43,12 @@ namespace Asperand.IrcBallistic.Connections.Irc
             try
             {
                 await InitConnection();
-                while (_isRunning)
+                while (IsRunning)
                 {
                     string inputLine;
                     while ((inputLine = await _reader.ReadLineAsync()) != null)
                     {
-                        var request = new IrcRequest(inputLine);
-                        foreach (var module in _modules)
-                        {
-                            await module.Handle(request, this);
-                        }
+                        Handle(new IrcRequest(inputLine));
                     }
                 }
             }
@@ -106,6 +97,15 @@ namespace Asperand.IrcBallistic.Connections.Irc
             await _writer.FlushAsync();
         }
 
+
+        public override Task WriteMessage(Response response)
+        {
+            var messageString = response.IsAction
+                ? $"PRIVMSG {response.Target} :ACTION {response.Text}"
+                : $"PRIVMSG {response.Target} :{response.Text}";
+            return WriteMessage(messageString);
+        }
+
         public async Task Whois(IEnumerable<string> usernames)
         {
             foreach (var username in usernames)
@@ -116,14 +116,7 @@ namespace Asperand.IrcBallistic.Connections.Irc
             await _writer.FlushAsync();
         }
 
-        public async Task Stop()
-        {
-            await WriteMessage($"{_identity} QUIT :I'll Show myself out. ");
-            DisposeConnection();
-            _thread.Join();
-        }
-
-        private void DisposeConnection()
+        public override void Dispose()
         {
             _writer.Close();
             _writer.Dispose();

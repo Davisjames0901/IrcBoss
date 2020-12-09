@@ -34,12 +34,5 @@ namespace Asperand.IrcBallistic.Module.Command.Irc
             };
             return message;
         }
-
-        //todo: move this to the connection!
-        public string Serialize(IResponse messageResponse)
-        {
-            var response = (IrcResponse) messageResponse;
-            return response.IsAction ? $"PRIVMSG {response.Target} :ACTION {response.Text}" : $"PRIVMSG {response.Target} :{response.Text}";
-        }
     }
 }

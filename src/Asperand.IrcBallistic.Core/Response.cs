@@ -1,8 +1,6 @@
-using Asperand.IrcBallistic.Core.Interfaces;
-
-namespace Asperand.IrcBallistic.Connections.Irc
+namespace Asperand.IrcBallistic.Core
 {
-    public class IrcResponse : IResponse
+    public class Response
     {
         public string Text { get; init; }
         public bool IsAction { get; init; }

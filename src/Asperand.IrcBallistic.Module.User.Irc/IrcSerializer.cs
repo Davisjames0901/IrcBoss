@@ -34,13 +34,6 @@ namespace Asperand.IrcBallistic.Module.User.Irc
             return null;
         }
 
-        //Todo: this needs moved to the connection. Responses need to be uniform across all platforms so it doesnt make sense for this to be here...
-        public string Serialize(IResponse messageResponse)
-        {
-            var response = (IrcResponse) messageResponse;
-            return response.IsAction ? $"PRIVMSG {response.Target} :ACTION {response.Text}" : $"PRIVMSG {response.Target} :{response.Text}";
-        }
-        
         private UserEvent HandleUserEvent(IrcRequest request)
         {
             UserEventEnum? e = request.Action switch 

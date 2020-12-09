@@ -11,10 +11,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Asperand.IrcBallistic.InversionOfControl\Asperand.IrcBallistic.InversionOfControl.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Events" />
+      <ProjectReference Include="..\Asperand.IrcBallistic.Utilities\Asperand.IrcBallistic.Utilities.csproj" />
     </ItemGroup>
 
 </Project>
