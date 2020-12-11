@@ -31,7 +31,7 @@ namespace Asperand.IrcBallistic.Module.Command
             _serializer = serializer;
         }
 
-        protected override Task<ModuleResult> Execute<T>(IRequest payload, T connection)
+        protected override Task<ModuleResult> Execute(IRequest payload, IConnection connection)
         {
             var request = _serializer.Deserialize(payload);
             if(request is not null)

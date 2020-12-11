@@ -2,18 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Asperand.IrcBallistic.Core.Interfaces;
+using Asperand.IrcBallistic.Core.Job;
+using Asperand.IrcBallistic.Core.Job.Data;
 using Asperand.IrcBallistic.Utilities.CollectionExtensions;
 using Asperand.IrcBallistic.Utilities.Concurrancy;
 using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Core.Module
 {
-    public abstract class ModuleBase : IModule
+    public abstract class ModuleBase : EventfulJob<ModuleEvent>, IModule
     {
-        private readonly ILogger<IModule> _log;
         private readonly Queue<TimeSpan> _opTimes;
         private readonly Queue<TimeSpan> _nopTimes;
         private DateTime? _executionStartedTime;
@@ -22,18 +22,16 @@ namespace Asperand.IrcBallistic.Core.Module
         private bool _isExecuting;
         private bool _isPanicking;
         private Task _executingTask;
-        private Action<ModuleStatistics> _troubleCallback;
 
-        public ModuleBase(ILogger<IModule> log)
+        public ModuleBase(ILogger<ModuleBase> log) :base(log)
         {
-            _log = log;
             _opTimes = new Queue<TimeSpan>();
             _nopTimes = new Queue<TimeSpan>();
             _totalRuns = 0;
             _exceptions = 0;
         }
 
-        public ModuleStatistics ModuleStatistics => new()
+        public override JobStatistics JobStats => new()
         {
             Status = GetCurrentStatus(),
             DefaultTimeout = TimeoutSeconds,
@@ -43,11 +41,11 @@ namespace Asperand.IrcBallistic.Core.Module
             ExecutionStartedTime = _executionStartedTime
         };
 
-        public Task Handle<T>(IRequest request, T connection) where T : IConnection
+        public override Task Handle(ModuleEvent request)
         {
             if (_isExecuting)
             {
-                Locks.SimpleInverseSpinLock(ref _isExecuting, TimeoutSeconds, StartPanic);
+                Locks.SimpleInverseSpinLock(ref _isExecuting, TimeoutSeconds, Panic);
             }
 
             _isPanicking = false;
@@ -55,23 +53,18 @@ namespace Asperand.IrcBallistic.Core.Module
             _executionStartedTime = DateTime.Now;
 
             var timer = Stopwatch.StartNew();
-            _executingTask = Execute(request, connection)
+            _executingTask = Execute(request.Request, request.Connection)
                 .ContinueWith(x => Complete(timer, x));
             return _executingTask;
         }
-
-        public void RegisterTroubleCallback(Action<ModuleStatistics> action)
-        {
-            _troubleCallback = action;
-        }
-
+        
         private void Complete(Stopwatch timer, Task<ModuleResult> task)
         {
             _totalRuns++;
             timer.Stop();
             if (task.IsFaulted)
             {
-                _log.LogError("Module handle failed", task.Exception);
+                Log.LogError("Module handle failed", task.Exception);
                 _exceptions++;
                 return;
             }
@@ -85,7 +78,7 @@ namespace Asperand.IrcBallistic.Core.Module
                     _opTimes.AddButDontExceed(timer.Elapsed, 100);
                     break;
                 default:
-                    _log.LogWarning($"Module result not handled in statistics: {task.Result}");
+                    Log.LogWarning($"Module result not handled in statistics: {task.Result}");
                     break;
             }
 
@@ -93,45 +86,23 @@ namespace Asperand.IrcBallistic.Core.Module
             _executionStartedTime = null;
         }
         
-        private ModuleStatus GetCurrentStatus()
+        private JobStatus GetCurrentStatus()
         {
             if (_isPanicking)
-                return ModuleStatus.Panicking;
+                return JobStatus.Panicking;
             if (_isExecuting)
-                return ModuleStatus.Running;
-            return ModuleStatus.Idle;
+                return JobStatus.Running;
+            return JobStatus.Idle;
         }
 
-        private void StartPanic()
+        public override void Kill()
         {
-            _log.LogError("Starting panic!");
-            _isPanicking = true;
-            if (_troubleCallback == null)
-            {
-                _log.LogError("No trouble callback, Killing task violently buckle up");
-                Kill();
-                return;
-            }
-
-            while (_isPanicking)
-            {
-                var stuckTime = (DateTime.Now - _executionStartedTime.Value).TotalSeconds - TimeoutSeconds;
-                _log.LogError($"Calling for help... I think ive been stuck for {stuckTime}");
-                _troubleCallback(ModuleStatistics);
-                Thread.Sleep(10_000);
-            }
-        }
-
-        private void Kill()
-        {
-            _executingTask?.Dispose();
             _isExecuting = false;
-            _isPanicking = false;
+            base.Kill();
         }
-
-
+        
         public abstract bool IsEagerModule { get; }
         public abstract int TimeoutSeconds { get; }
-        protected abstract Task<ModuleResult> Execute<T>(IRequest payload, T connection) where T : IConnection;
+        protected abstract Task<ModuleResult> Execute(IRequest payload, IConnection connection);
     }
 }

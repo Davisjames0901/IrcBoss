@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Asperand.IrcBallistic.Core.Interfaces;
+using Asperand.IrcBallistic.Core.Module;
 using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Core
@@ -12,9 +13,9 @@ namespace Asperand.IrcBallistic.Core
     {
         protected bool IsRunning;
         private readonly ILogger<IConnection> _log;
-        private readonly List<IModule> _modules;
+        private readonly List<ModuleBase> _modules;
         
-        public ConnectionBase(IEnumerable<IModule> modules, ILogger<IConnection> log)
+        public ConnectionBase(IEnumerable<ModuleBase> modules, ILogger<IConnection> log)
         {
             _log = log;
             _modules = modules.ToList();
@@ -36,7 +37,7 @@ namespace Asperand.IrcBallistic.Core
             foreach (var module in _modules)
             {
                 //Todo: we need to pull the statistics stuff out of the module and create the job registry
-                new Thread(() => module.Handle(request, this)).Start();
+                new Thread(() => module.Handle(new ModuleEvent(request, this))).Start();
             }
         }
 

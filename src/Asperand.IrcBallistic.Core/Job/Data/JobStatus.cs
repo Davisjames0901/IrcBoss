@@ -1,6 +1,6 @@
-namespace Asperand.IrcBallistic.Core.Module
+namespace Asperand.IrcBallistic.Core.Job.Data
 {
-    public enum ModuleStatus
+    public enum JobStatus
     {
         Panicking,
         Running,

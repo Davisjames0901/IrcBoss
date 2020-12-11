@@ -22,7 +22,7 @@ namespace Asperand.IrcBallistic.Module.User
         public override bool IsEagerModule => true;
         public override int TimeoutSeconds => 10;
 
-        protected override Task<ModuleResult> Execute<T>(IRequest requestMessage, T connection)
+        protected override Task<ModuleResult> Execute(IRequest requestMessage, IConnection connection)
         {
             var request = _serializer.Deserialize(requestMessage);
             var result = ModuleResult.Nop;

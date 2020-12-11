@@ -18,3 +18,17 @@ namespace Asperand.IrcBallistic.Worker.Commands
         }
     }
 }
+//localhost/mytest/get
+//   My Test Get -a 
+public class MyTestController //:Controller
+{
+    public void Index()
+    {
+        
+    }
+
+    public void Get()
+    {
+        
+    }
+} 

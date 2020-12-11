@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Asperand.IrcBallistic.Core;
 using Asperand.IrcBallistic.Core.Interfaces;
+using Asperand.IrcBallistic.Core.Module;
 using Microsoft.Extensions.Logging;
 
 namespace Asperand.IrcBallistic.Connections.Irc
@@ -24,7 +25,7 @@ namespace Asperand.IrcBallistic.Connections.Irc
 
         private const string User = "USER IRCbot 0 * :IRCbot";
 
-        public IrcConnection(IrcConfiguration config, IEnumerable<IModule> modules, ILogger<IrcConnection> log)
+        public IrcConnection(IrcConfiguration config, IEnumerable<ModuleBase> modules, ILogger<IrcConnection> log)
             : base(modules, log)
         {
             _thread = new Thread(Listener);
