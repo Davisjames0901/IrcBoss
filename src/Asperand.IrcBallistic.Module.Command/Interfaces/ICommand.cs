@@ -8,6 +8,7 @@ namespace Asperand.IrcBallistic.Module.Command.Interfaces
   public interface ICommand
   {
     CommandExecutionContext Context { get; set; }
-    Task<CommandResult> Execute(CancellationToken token);
+    Task<CommandResult> Execute(string[] args, CancellationToken token);
+    string GetHelpText();
   }
 }

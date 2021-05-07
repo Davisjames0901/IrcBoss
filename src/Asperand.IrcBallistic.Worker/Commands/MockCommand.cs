@@ -9,25 +9,30 @@ using Asperand.IrcBallistic.Module.User.Data;
 namespace Asperand.IrcBallistic.Worker.Commands
 {
     [CommandGroup("mock", "Mocks the target")]
-    public class MockCommand : BaseCommand
+    public class MockCommand : BaseCommand<MockOptions>
     {
         private readonly UserContainer _users;
+
         public MockCommand(UserContainer users)
         {
             _users = users;
         }
 
-        [Content]
-        public string Content { get; set; }
-        
-        public override async Task<CommandResult> Execute(CancellationToken token)
+        public override async Task<CommandResult> Execute(MockOptions options, CancellationToken token)
         {
-            var lastMessage = _users.GetLastMessageByName(Content);
+            var lastMessage = _users.GetLastMessageByName(options.User);
             if (string.IsNullOrWhiteSpace(lastMessage))
                 return CommandResult.Failed;
 
-            await SendMessage($"<{Content}> "+new string(lastMessage.Select((x, i) => i % 2 != 0 ? char.ToUpper(x) : char.ToLower(x)).ToArray()));
+            await SendMessage($"<{options.User}> " +
+                              new string(lastMessage.Select((x, i) => i % 2 != 0 ? char.ToUpper(x) : char.ToLower(x))
+                                  .ToArray()));
             return CommandResult.Success;
         }
+    }
+
+    public class MockOptions
+    {
+        public string User { get; set; }
     }
 }

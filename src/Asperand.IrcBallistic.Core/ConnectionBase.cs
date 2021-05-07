@@ -43,6 +43,11 @@ namespace Asperand.IrcBallistic.Core
 
         public abstract string Name { get; }
         public abstract Task WriteMessage(Response message);
+        public void RegisterAction()
+        {
+            throw new NotImplementedException();
+        }
+
         public abstract void InternalStart();
 
         public abstract void Dispose();

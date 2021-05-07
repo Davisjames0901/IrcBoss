@@ -49,6 +49,7 @@ namespace Asperand.IrcBallistic.Connections.Irc
                     string inputLine;
                     while ((inputLine = await _reader.ReadLineAsync()) != null)
                     {
+                        _log.LogDebug(inputLine);
                         Handle(new IrcRequest(inputLine));
                     }
                 }

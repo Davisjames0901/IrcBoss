@@ -1,5 +1,6 @@
 using Asperand.IrcBallistic.Connections.Irc.Modules;
 using Asperand.IrcBallistic.Core.Interfaces;
+using Asperand.IrcBallistic.Core.Module;
 using Asperand.IrcBallistic.InversionOfControl.Abstracts;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,7 +11,7 @@ namespace Asperand.IrcBallistic.Connections.Irc
         protected override IServiceCollection RegisterInternalDependencies(IServiceCollection services, IrcConfiguration config)
         {
             services.AddTransient<IConnection, IrcConnection>();
-            services.AddTransient<IModule, PingModule>();
+            services.AddTransient<ModuleBase, PingModule>();
             services.AddSingleton(config);
             
             return services;

@@ -1,5 +1,5 @@
 using Asperand.IrcBallistic.Core.Extensions;
-using Asperand.IrcBallistic.Core.Interfaces;
+using Asperand.IrcBallistic.Core.Module;
 using Asperand.IrcBallistic.InversionOfControl.Abstracts;
 using Asperand.IrcBallistic.Module.Command.Engine;
 using Asperand.IrcBallistic.Module.Command.Interfaces;
@@ -14,8 +14,7 @@ namespace Asperand.IrcBallistic.Module.Command.Irc
             services.AddSingleton(config);
             services.AddSingleton<CommandEngine>();
             services.AddSingleton<CommandMetadataAccessor>();
-            services.AddTransient<ArgumentParser>();
-            services.AddTransient<IModule, CommandModule>();
+            services.AddTransient<ModuleBase, CommandModule>();
             services.AddTransient<ISerializer, IrcSerializer>();
             services.AddAllInheritorsTransient<ICommand>();
 

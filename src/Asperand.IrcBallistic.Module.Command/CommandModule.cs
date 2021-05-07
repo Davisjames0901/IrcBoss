@@ -45,7 +45,6 @@ namespace Asperand.IrcBallistic.Module.Command
             
             _log.LogInformation("Received command request");
             var command = _commandAccessor.LocateCommandGroup(request.CommandName);
-            _commandAccessor.PopulateCommand(command, request);
             if (command == null)
                 return ModuleResult.Nop;
 

@@ -7,15 +7,15 @@ namespace Asperand.IrcBallistic.Connections.Irc.Modules
 {
     public class PingModule: ModuleBase
     {
-        public PingModule(ILogger<IModule> log) : base(log)
+        public PingModule(ILogger<PingModule> log) : base(log)
         { }
         
         public override bool IsEagerModule => true;
         public override int TimeoutSeconds => 10;
         
-        protected override async Task<ModuleResult> Execute<T>(IRequest payload, T connection)
+        protected override async Task<ModuleResult> Execute(IRequest payload, IConnection connection)
         {
-            var irc = connection as IrcConnection;
+            var irc = (IrcConnection) connection;
             var request = (IrcRequest) payload;
             if (request.LineTokens[0] == "PING")
             {

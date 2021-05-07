@@ -9,5 +9,6 @@ namespace Asperand.IrcBallistic.Core.Interfaces
     Task Stop();
     void Start();
     public Task WriteMessage(Response message);
+    public void RegisterAction();
   }
 }

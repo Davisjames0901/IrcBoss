@@ -31,7 +31,7 @@ namespace Asperand.IrcBallistic.Module.Command.Engine
             };
             
             var tokenSource = new CancellationTokenSource();
-            var task = command.Execute(tokenSource.Token);
+            var task = command.Execute(request.Content.Split(' '), tokenSource.Token);
             ScheduleProcess(task, $"{request.RequesterUsername}:{source.Name}:{request.CommandName}", tokenSource);
             
             return task.Id;

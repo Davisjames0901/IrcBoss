@@ -7,28 +7,18 @@ using Asperand.IrcBallistic.Module.Command.Enum;
 namespace Asperand.IrcBallistic.Worker.Commands
 {
     [CommandGroup("echo", "Echos the input provided.")]
-    public class Echo : BaseCommand
+    public class Echo : BaseCommand<EchoOptions>
     {
-        [Content]
-        public string Content { get; set; }
-        public override async Task<CommandResult> Execute(CancellationToken token)
+        public override async Task<CommandResult> Execute(EchoOptions options, CancellationToken token)
         {
-            await SendMessage(Content);
+            await SendMessage(options.Content);
             return CommandResult.Success;
         }
     }
-}
-//localhost/mytest/get
-//   My Test Get -a 
-public class MyTestController //:Controller
-{
-    public void Index()
-    {
-        
-    }
 
-    public void Get()
+    public class EchoOptions
     {
-        
+        [Content]
+        public string Content { get; set; }
     }
-} 
+}

@@ -5,7 +5,6 @@ namespace Asperand.IrcBallistic.Module.Command.Data
     public class CommandRequest
     {
         public string CommandName { get; set; }
-        public Dictionary<string, string> Flags { get; set; }
         public string Content { get; set; }
         public string Raw { get; set; }
         public string Target { get; set; }
